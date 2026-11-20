@@ -1,524 +1,291 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import OrderSection from '../components/OrderSection.astro';
+import { ABOUT_PARAGRAPHS, OFFER_CATEGORIES } from '../data/products';
+import { SITE, getWhatsAppUrl, withBase } from '../data/site';
 
-// Seznam vánočních balíčků
-const packages = [
-  {
-    id: "tradicni-1kg",
-    badge: "Nejoblíbenější",
-    badgeColor: "bg-[#8B2635] text-white",
-    name: "Tradiční vánoční kolekce",
-    subtitle: "Poctivé máslové cukroví pečené podle rodinných receptur",
-    weight: "1 000 g (cca 70–80 ks)",
-    price: "1 190 Kč",
-    description: "Výběr 8 druhů tradičního cukroví z pravého českého másla, vlašských ořechů a domácích marmelád.",
-    items: [
-      "Máslové linecké kytičky s domácím rybízovým džemem",
-      "Křehké vanilkové rohlíčky z vlašských ořechů a Bourbon vanilky",
-      "Kakaové pracny s kousky 70% hořké čokolády",
-      "Ořechy plněné jemným kávovo-karamelovým krémem",
-      "Tradiční vosí hnízda (včelí úly) s vaječným likérem",
-      "Medové perníčky zdobené bílkovou polevou",
-      "Křupavé marokánky s mandlemi a brusinkami",
-      "Čokoládové košíčky s lískooříškovým nugátem"
-    ],
-    highlight: true,
-  },
-  {
-    id: "raw-vegan-700g",
-    badge: "Bez lepku & cukru",
-    badgeColor: "bg-[#2D4A3E] text-white",
-    name: "Raw & Vegan vánoční výběr",
-    subtitle: "Nepečené delikatesy ze sušeného ovoce a aktivovaných ořechů",
-    weight: "700 g (cca 45–50 ks)",
-    price: "1 090 Kč",
-    description: "100% rostlinné, přirozeně bezlepkové a slazené pouze královskými datlemi Medjool a javorovým sirupem.",
-    items: [
-      "Raw lanýže z belgického raw kakaa a pomerančové kůry",
-      "Pistáciové košíčky s bílou kokosovou čokoládou",
-      "Kokosové kuličky s celou mandlí (á la Raffaello)",
-      "Datlové marokánky s dýňovými a slunečnicovými semínky",
-      "Matcha vánoční stromečky s lyofilizovanými malinami",
-      "Oříškové kuličky v pražených lískových oříšcích"
-    ],
-    highlight: false,
-  },
-  {
-    id: "degustacni-500g",
-    badge: "Malé dárkové balení",
-    badgeColor: "bg-[#D4A373] text-[#2C2725]",
-    name: "Degustační krabička",
-    subtitle: "Ideální jako milý dárek pro kolegy, přátele nebo k mikuláši",
-    weight: "500 g (cca 35–40 ks)",
-    price: "690 Kč",
-    description: "Kompaktní mix nejoblíbenějších druhů v elegantní dárkové krabičce s atlasovou stuhou.",
-    items: [
-      "Průřez 6 nejžádanějších tradičních i raw druhů",
-      "Dárkové balení s vánoční jmenovkou a pečetí",
-      "Vhodné i pro firemní poděkování"
-    ],
-    highlight: false,
-  }
-];
-
-// Galerie jednotlivých druhů s popisem pro detailní prozkoumání
-const cookieGallery = [
-  {
-    name: "Linecké s rybízem",
-    category: "Tradiční",
-    desc: "Křehké těsto s vysokým podílem másla a osvěžující domácí džem ze zahrady.",
-    tag: "České máslo"
-  },
-  {
-    name: "Vanilkové rohlíčky",
-    category: "Tradiční",
-    desc: "Plné mletých vlašských ořechů a obalené v třtinovém cukru s pravou vanilkou.",
-    tag: "Vlašské ořechy"
-  },
-  {
-    name: "Pistáciové raw košíčky",
-    category: "Raw & Bezlepkové",
-    desc: "Spodní korpus z mandlí a datlí, vršek z čistého 100% pistáciového másla.",
-    tag: "100% Pistácie"
-  },
-  {
-    name: "Vosí hnízda (Úly)",
-    category: "Tradiční",
-    desc: "Jemné piškotové těsto s rumem plněné poctivým žloutkovým krémem.",
-    tag: "Rodinný recept"
-  },
-  {
-    name: "Čokoládové lanýže",
-    category: "Raw & Vegan",
-    desc: "Hustá ganache z nepraženého kakaa Criollo obalená v kakaovém prachu.",
-    tag: "70% Kakao"
-  },
-  {
-    name: "Pomerančové marokánky",
-    category: "Tradiční",
-    desc: "Svařená smetana, med, sekané mandle a kandovaná pomerančová kůra.",
-    tag: "Mandle & Med"
-  }
-];
-
-// Stálá nabídka raw dortů
-const rawCakes = [
-  {
-    name: "Malinový raw cheesecake",
-    desc: "Jemný kešu krém na datlovo-mandlovém korpusu přelitý vrstvou divokých malin.",
-    allergens: "Alergeny: 8 (ořechy)"
-  },
-  {
-    name: "Čokoládový dort se slaným karamelem",
-    desc: "Bohatá raw čokoládová pěna s karamelem z kokosového mléka a špetkou mořské soli.",
-    allergens: "Alergeny: 8 (ořechy)"
-  },
-  {
-    name: "Mango & Maracuja exotický řez",
-    desc: "Svěží letní i zimní kombinace tropického ovoce a kokosového krému bez přidaného cukru.",
-    allergens: "Alergeny: 8 (ořechy)"
-  }
-];
-
-const phoneNumber = "+420 777 000 000";
-const whatsappMessage = encodeURIComponent("Ahoj! Ráda bych si objednala vánoční cukroví. Mám zájem o: ");
-const whatsappLink = `https://wa.me/420777000000?text=${whatsappMessage}`;
-const instagramUrl = "https://instagram.com/";
+const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Rawtík: ');
 ---
 
-<Layout title="Poctivé vánoční cukroví & raw dobroty | Ruční výroba">
-  <!-- Hlavní navigace / Horní lišta -->
-  <header class="sticky top-0 z-40 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#E8E2D8]">
-    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2">
-        <span class="text-xl">✨</span>
-        <span class="font-serif text-lg sm:text-xl font-bold tracking-tight text-[#8B2635]">Sladké Vánoce</span>
-      </a>
-      <div class="flex items-center gap-2">
-        <a 
-          href={whatsappLink} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors shadow-sm"
-        >
-          <svg class="w-4 h-4 fill-current shrink-0" width="16" height="16" viewBox="0 0 24 24">
-            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.086.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/>
-          </svg>
-          <span class="hidden xs:inline">Napsat na</span> WhatsApp
-        </a>
-        <a 
-          href="#nabidka" 
-          class="hidden sm:inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold bg-[#8B2635] text-white hover:bg-[#721E2B] transition-colors"
-        >
-          Objednat
-        </a>
+<Layout
+  title="RAWTÍK – Vánoční cukroví & raw dorty bez výčitek | Praha 7"
+  currentPath="/"
+>
+  <!-- 1. DOMŮ (Úvodní Hero) -->
+  <section class="pt-8 pb-12 sm:pt-14 sm:pb-16 border-b border-[#E8E2D8]">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div class="lg:col-span-6">
+          {
+            SITE.christmasSeason && (
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2635]/10 text-[#8B2635] text-xs font-bold uppercase tracking-wider mb-4">
+                <span aria-hidden="true">●</span> Vánoce 2026 • Ruční výroba v Holešovicích
+              </div>
+            )
+          }
+
+          <h1 class="font-serif text-4xl sm:text-5xl font-bold text-[#2C2725] leading-[1.12] tracking-tight">
+            {
+              SITE.christmasSeason ? (
+                <>
+                  Vánoční cukroví <span class="text-[#8B2635] italic font-normal">bez výčitek</span>
+                </>
+              ) : (
+                <>
+                  Raw dorty <span class="text-[#8B2635] italic font-normal">bez výčitek</span>
+                </>
+              )
+            }
+          </h1>
+
+          <ul class="mt-6 space-y-3 text-base text-[#5A534E]">
+            <li class="flex items-start gap-2.5">
+              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
+              <span>Z kvalitních surovin, slazené pouze <strong>datlemi a medem od včelaře</strong></span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
+              <span>Výborná chuť a složení, ze kterého bude mít radost i vaše tělo</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
+              <span>Přirozeně <strong>bez lepku i laktózy</strong></span>
+            </li>
+          </ul>
+
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <a
+              href="#nabidka"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-[#8B2635] text-white hover:bg-[#721E2B] active:scale-[0.98] transition-all shadow-md shadow-[#8B2635]/20"
+            >
+              <span>Prohlédnout nabídku</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path d="M19 9l-7 7-7-7" />
+              </svg>
+            </a>
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold bg-white border border-[#D5CDC2] text-[#2C2725] hover:bg-[#F3ECE2] transition-colors"
+            >
+              Napsat na WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Pravý vizuál: připraveno na fotku krabičky cukroví (zatím zobrazuje reálný úvodní dort + štítek) -->
+        <div class="lg:col-span-6">
+          <div class="relative rounded-3xl overflow-hidden shadow-xl border border-[#E8E2D8] bg-[#F3ECE2] aspect-[4/3]">
+            <img
+              src={withBase('/images/dorty/uvodni-dort.webp')}
+              alt="Ručně vyráběný raw dort Rawtík s čerstvým ovocem a ořechy"
+              fetchpriority="high"
+              width="1200"
+              height="900"
+              class="w-full h-full object-cover"
+            />
+            {
+              SITE.christmasSeason && (
+                <div class="absolute bottom-3 left-3 right-3 px-4 py-2.5 rounded-2xl bg-[#FAF7F2]/92 backdrop-blur-sm border border-[#E8E2D8] flex items-center justify-between gap-3">
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-[#8B2635]">Připravujeme vánoční foto</p>
+                    <p class="text-xs text-[#5A534E]">Po nafocení cukroví zde bude hlavní vánoční krabička.</p>
+                  </div>
+                  <a
+                    href={withBase('/vanocni-cukrovi')}
+                    class="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg bg-[#8B2635] text-white hover:bg-[#721E2B] transition-colors"
+                  >
+                    Cukroví →
+                  </a>
+                </div>
+              )
+            }
+          </div>
+        </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <!-- HERO SECTION: Mobile-first hero s prostorem na fotografii -->
-    <section class="relative overflow-hidden pt-8 pb-12 sm:pt-16 sm:pb-20 border-b border-[#E8E2D8]">
-      <div class="max-w-4xl mx-auto px-4">
-        <!-- Odznáček sezóny -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2635]/10 text-[#8B2635] text-xs font-semibold uppercase tracking-wider mb-4">
-          <span class="animate-pulse">●</span> Vánoce 2026 • Omezená kapacita
-        </div>
-
-        <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl font-bold text-[#2C2725] leading-[1.15] mb-4">
-          Poctivé vánoční cukroví <br class="hidden sm:inline" />
-          <span class="text-[#8B2635] italic font-normal">&amp; raw dobroty</span>
-        </h1>
-
-        <p class="text-base sm:text-xl text-[#5A534E] leading-relaxed max-w-2xl mb-6">
-          Křehké máslové kousky, vůně pravé vanilky a poctivé ořechové náplně. 
-          Vše ručně vyrobené z prvotřídních surovin, bez umělých náhražek a s láskou k pečení.
+  <!-- 2. NABÍDKA A CENÍK (Rozcestník se 3 výraznými klikacími kartami kategorií) -->
+  <section id="nabidka" class="scroll-mt-20 py-14 sm:py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32] mb-2">Co pro vás vyrábíme</p>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">
+          Nabídka a ceník
+        </h2>
+        <p class="mt-2.5 text-[#5A534E]">
+          Vyberte si kategorii a prohlédněte si fotografie, složení i kompletní ceník.
         </p>
+      </div>
 
-        <!-- Akční tlačítka -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-8">
-          <a 
-            href="#nabidka" 
-            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-[#8B2635] text-white hover:bg-[#721E2B] active:scale-[0.98] transition-all shadow-md shadow-[#8B2635]/20"
-          >
-            <span>Prohlédnout vánoční krabičky</span>
-            <svg class="w-4 h-4 shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-          </a>
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold bg-white border border-[#D5CDC2] text-[#2C2725] hover:bg-[#F2ECE3] active:scale-[0.98] transition-all"
-          >
-            <span class="text-[#25D366] font-bold">WhatsApp dotaz</span>
-          </a>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          OFFER_CATEGORIES.map((category) => (
+            <a
+              href={withBase(category.path)}
+              class="group rounded-2xl overflow-hidden bg-white border border-[#E8E2D8] shadow-xs hover:shadow-lg hover:border-[#C58B55] transition-all flex flex-col"
+            >
+              <div class="relative aspect-[4/3] bg-[#F3ECE2] overflow-hidden">
+                {category.image ? (
+                  <img
+                    src={withBase(category.image.src)}
+                    alt={category.image.alt}
+                    loading="lazy"
+                    width="800"
+                    height="600"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div class="w-full h-full bg-gradient-to-br from-[#6B202B] via-[#8B2635] to-[#9A5B32] p-6 flex flex-col items-center justify-center text-center text-white">
+                    <span class="text-xs uppercase tracking-widest text-white/80 font-semibold mb-1.5">
+                      5 letošních druhů
+                    </span>
+                    <p class="font-serif text-2xl font-bold leading-snug">Vánoční raw cukroví</p>
+                    <p class="text-xs text-white/80 mt-2 max-w-[20ch]">
+                      Fotografie krabiček doplníme ihned po focení
+                    </p>
+                  </div>
+                )}
+
+                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#FAF7F2]/95 text-[#8B2635] shadow-xs">
+                  {category.badge}
+                </span>
+              </div>
+
+              <div class="p-5 flex-1 flex flex-col justify-between gap-4">
+                <div>
+                  <h3 class="font-serif text-2xl font-bold text-[#2C2725] group-hover:text-[#8B2635] transition-colors">
+                    {category.title}
+                  </h3>
+                  <p class="mt-1.5 text-sm text-[#5A534E] leading-relaxed">
+                    {category.subtitle}
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-[#E8E2D8]">
+                  <span class="font-serif text-lg font-bold text-[#8B2635]">{category.priceFrom}</span>
+                  <span class="text-sm font-bold text-[#2C2725] group-hover:text-[#8B2635] inline-flex items-center gap-1">
+                    Zobrazit <span aria-hidden="true">→</span>
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. O NÁS -->
+  <section id="o-nas" class="scroll-mt-20 py-14 sm:py-16 bg-[#F3ECE2]/60 border-t border-[#E8E2D8]">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div class="lg:col-span-7 space-y-4">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Příběh &amp; suroviny</p>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">O nás</h2>
+          {
+            ABOUT_PARAGRAPHS.map((paragraph, idx) => (
+              <p
+                class:list={[
+                  'leading-relaxed',
+                  idx === 0
+                    ? 'text-lg font-medium text-[#2C2725]'
+                    : 'text-base text-[#5A534E]',
+                ]}
+              >
+                {paragraph}
+              </p>
+            ))
+          }
         </div>
 
-        <!-- Hero vizuál: Placeholder pro vaši hlavní fotografii (Sony A7 III) -->
-        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-tr from-[#3D231E] to-[#6A4135] aspect-[4/3] sm:aspect-[16/9] shadow-xl border border-[#E8E2D8] flex items-center justify-center text-center p-6 text-white group">
-          <div class="absolute inset-0 bg-cover bg-center mix-blend-overlay opacity-30" style="background-image: radial-gradient(#D4A373 1px, transparent 1px); background-size: 16px 16px;"></div>
-          
-          <div class="relative z-10 max-w-md">
-            <span class="inline-block p-3 rounded-full bg-white/10 backdrop-blur-md mb-3 text-2xl">📸</span>
-            <p class="font-serif text-xl sm:text-2xl font-bold mb-1">Místo pro Hero fotografii</p>
-            <p class="text-xs sm:text-sm text-white/80">
-              Zde se vloží vaše vyfocená dárková krabička se sušenými pomeranči, badyánem a ořechy.
+        <div class="lg:col-span-5 grid grid-cols-2 gap-3">
+          <div class="rounded-2xl overflow-hidden border border-[#E8E2D8] shadow-sm aspect-[3/4]">
+            <img
+              src={withBase('/images/dorty/malinovy-24cm.webp')}
+              alt="Malinový raw dort zdobený ovocem a pistáciemi"
+              loading="lazy"
+              width="600"
+              height="800"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="rounded-2xl overflow-hidden border border-[#E8E2D8] shadow-sm aspect-[3/4] mt-6">
+            <img
+              src={withBase('/images/dorty/slany-arasid-zdobeny.webp')}
+              alt="Raw dort Slaný arašíd se zdobením"
+              loading="lazy"
+              width="600"
+              height="800"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. JAK OBJEDNAT A PŘEVZETÍ -->
+  <OrderSection />
+
+  <!-- 5. KONTAKT -->
+  <section id="kontakt" class="scroll-mt-20 py-14 sm:py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="rounded-3xl bg-white border border-[#E8E2D8] p-6 sm:p-10 shadow-xs">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div class="md:col-span-7 space-y-3">
+            <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Kde mě najdete</p>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">Kontakt</h2>
+            <p class="text-lg font-semibold text-[#2C2725] pt-1">{SITE.owner}</p>
+            <p class="text-[#5A534E]">{SITE.location}</p>
+
+            <dl class="pt-2 space-y-2 text-sm sm:text-base">
+              <div class="flex flex-wrap gap-x-2">
+                <dt class="text-[#7A726C]">Telefon / WhatsApp:</dt>
+                <dd class="font-semibold text-[#2C2725]">
+                  <a href={SITE.phoneHref} class="hover:text-[#8B2635] transition-colors">
+                    {SITE.phoneDisplay}
+                  </a>
+                </dd>
+              </div>
+              <div class="flex flex-wrap gap-x-2">
+                <dt class="text-[#7A726C]">E-mail:</dt>
+                <dd class="font-semibold text-[#2C2725]">
+                  <a href={`mailto:${SITE.email}`} class="hover:text-[#8B2635] transition-colors">
+                    {SITE.email}
+                  </a>
+                </dd>
+              </div>
+              <div class="flex flex-wrap gap-x-2">
+                <dt class="text-[#7A726C]">IČO:</dt>
+                <dd class="font-medium text-[#2C2725]">{SITE.ico}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="md:col-span-5 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] p-6 text-center space-y-3">
+            <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Sledujte nás na</p>
+            <a
+              href={SITE.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-5 rounded-xl font-bold text-white bg-gradient-to-r from-[#8B2635] via-[#B43E4F] to-[#C58B55] hover:opacity-95 transition-opacity shadow-sm"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+              <span>Instagram {SITE.instagramHandle}</span>
+            </a>
+            <p class="text-xs text-[#7A726C]">
+              Aktuální fotky dortů, sezónní novinky a zákulisí výroby.
             </p>
           </div>
         </div>
-
-        <!-- 3 pilíře poctivosti pod hero -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-[#E8E2D8]">
-          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/60 border border-[#E8E2D8]/60">
-            <span class="text-xl">🧈</span>
-            <div>
-              <p class="text-sm font-bold text-[#2C2725]">100% české máslo</p>
-              <p class="text-xs text-[#7A726C]">Žádné margaríny ani palmový olej</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/60 border border-[#E8E2D8]/60">
-            <span class="text-xl">🌰</span>
-            <div>
-              <p class="text-sm font-bold text-[#2C2725]">Výběrové ořechy</p>
-              <p class="text-xs text-[#7A726C]">Vlašské, lískové i sicilské pistácie</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/60 border border-[#E8E2D8]/60">
-            <span class="text-xl">🌿</span>
-            <div>
-              <p class="text-sm font-bold text-[#2C2725]">Raw &amp; Bezlepková volba</p>
-              <p class="text-xs text-[#7A726C]">Pro celiaky i milovníky lehčí stravy</p>
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
-
-    <!-- HARMONOGRAM & UZÁVĚRKA (Urgence a důležité termíny) -->
-    <section class="bg-[#8B2635] text-white py-6">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-3 text-center md:text-left">
-            <span class="text-3xl">⏳</span>
-            <div>
-              <h2 class="font-bold text-base sm:text-lg">Uzávěrka vánočních objednávek: 10. prosince 2026</h2>
-              <p class="text-xs sm:text-sm text-white/80">Kapacita je omezena, abychom udrželi 100% ruční kvalitu každého kousku.</p>
-            </div>
-          </div>
-          <div class="shrink-0 bg-white/10 px-4 py-2 rounded-xl text-center border border-white/20">
-            <span class="text-xs uppercase tracking-wider block text-white/70">Výdej krabiček</span>
-            <span class="font-bold text-sm sm:text-base">20. – 23. prosince</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SEKCE 1: VÁNOČNÍ NABÍDKA KRABIČEK -->
-    <section id="nabidka" class="py-12 sm:py-16 scroll-mt-16">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="text-center max-w-xl mx-auto mb-10">
-          <h2 class="font-serif text-2xl sm:text-4xl font-bold text-[#2C2725] mb-2">Vánoční kolekce 2026</h2>
-          <p class="text-sm sm:text-base text-[#5A534E]">
-            Vyberte si krabičku podle svých chutí. Každé balení je převázáno dárkovou stuhou a připraveno rovnou na sváteční stůl.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {packages.map((pkg) => (
-            <div class={`rounded-2xl bg-white border transition-all flex flex-col justify-between overflow-hidden relative shadow-sm hover:shadow-md ${
-              pkg.highlight 
-                ? 'border-[#8B2635] ring-2 ring-[#8B2635]/20 md:-translate-y-2' 
-                : 'border-[#E8E2D8]'
-            }`}>
-              <!-- Drobné záhlaví balíčku -->
-              <div class="p-5 sm:p-6 flex-1 flex flex-col">
-                <div class="flex items-center justify-between mb-3">
-                  <span class={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${pkg.badgeColor}`}>
-                    {pkg.badge}
-                  </span>
-                  <span class="text-xs font-semibold text-[#7A726C]">{pkg.weight}</span>
-                </div>
-
-                <h3 class="font-serif text-xl sm:text-2xl font-bold text-[#2C2725] mb-1">{pkg.name}</h3>
-                <p class="text-xs text-[#7A726C] mb-4">{pkg.subtitle}</p>
-
-                <div class="text-2xl sm:text-3xl font-extrabold text-[#8B2635] mb-4">
-                  {pkg.price}
-                </div>
-
-                <p class="text-xs sm:text-sm text-[#5A534E] mb-4 pb-4 border-b border-[#F0EAE1]">
-                  {pkg.description}
-                </p>
-
-                <h4 class="text-xs font-bold uppercase tracking-wider text-[#2C2725] mb-2">Co krabička obsahuje:</h4>
-                <ul class="space-y-1.5 text-xs sm:text-sm text-[#5A534E] mb-6 flex-1">
-                  {pkg.items.map((item) => (
-                    <li class="flex items-start gap-2">
-                      <span class="text-[#8B2635] font-bold">✓</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <!-- Tlačítko objednávky pro daný balíček -->
-                <a 
-                  href={`https://wa.me/420777000000?text=${encodeURIComponent(`Dobrý den, mám zájem o vánoční krabičku: ${pkg.name} (${pkg.price}).`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class={`w-full py-3 px-4 rounded-xl text-center text-sm font-bold transition-all flex items-center justify-center gap-2 ${
-                    pkg.highlight
-                      ? 'bg-[#8B2635] text-white hover:bg-[#721E2B] shadow-sm'
-                      : 'bg-[#F2ECE3] text-[#2C2725] hover:bg-[#E8E0D4]'
-                  }`}
-                >
-                  <span>Objednat tento balíček</span>
-                  <svg class="w-4 h-4 shrink-0" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- SEKCE 2: GALERIE DRUHŮ CUKROVÍ (Detail produktů) -->
-    <section class="py-12 bg-white border-y border-[#E8E2D8]">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">
-          <div>
-            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725]">Přehlídka chutí</h2>
-            <p class="text-xs sm:text-sm text-[#5A534E]">Detailní pohled na vybrané druhy, které v krabičkách najdete.</p>
-          </div>
-          <span class="text-xs font-semibold text-[#8B2635]">100% ruční práce</span>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {cookieGallery.map((c) => (
-            <div class="group rounded-xl border border-[#E8E2D8] bg-[#FAF7F2] p-4 flex flex-col justify-between hover:border-[#8B2635]/40 transition-colors">
-              <div>
-                <!-- Placeholder pro fotku detailu (45° / makro řez) -->
-                <div class="rounded-lg aspect-square bg-[#E8E0D4] mb-3 flex items-center justify-center text-[#7A726C] text-xs font-medium text-center p-2 group-hover:scale-[1.02] transition-transform">
-                  <span>📸 Foto: {c.name}</span>
-                </div>
-                <div class="flex items-center justify-between gap-1 mb-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-[#8B2635]">{c.category}</span>
-                  <span class="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#E8E2D8] text-[#7A726C]">{c.tag}</span>
-                </div>
-                <h3 class="font-serif font-bold text-sm sm:text-base text-[#2C2725] mb-1">{c.name}</h3>
-                <p class="text-xs text-[#5A534E] leading-relaxed line-clamp-3">{c.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- SEKCE 3: O MNĚ & POCTIVÉ SUROVINY (Příběh cukrářky) -->
-    <section class="py-12 sm:py-16">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <!-- Placeholder pro fotku cukrářky / hands-in-frame -->
-          <div class="relative rounded-2xl overflow-hidden bg-[#3D231E] aspect-[4/5] shadow-lg flex items-center justify-center text-center p-6 text-white border border-[#E8E2D8]">
-            <div class="relative z-10">
-              <span class="text-4xl block mb-2">👩‍🍳</span>
-              <p class="font-serif text-xl font-bold mb-1">Příběh z naší kuchyně</p>
-              <p class="text-xs text-white/80">
-                Zde umístíme vaši fotku rukou při zdobení cukroví nebo portrét s tácem cukroví.
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-[#8B2635] block mb-2">O mně a mé vášni</span>
-            <h2 class="font-serif text-2xl sm:text-4xl font-bold text-[#2C2725] mb-4">
-              Pečení bez zkratek a chemie
-            </h2>
-            <div class="space-y-3 text-sm sm:text-base text-[#5A534E] leading-relaxed">
-              <p>
-                Začalo to pečením pro rodinu a přátele. Vadilo mi, jak je většina kupovaného cukroví přeslazená bílým cukrem a plná ztužených tuků, které v ústech zanechávají povlak.
-              </p>
-              <p>
-                V mém cukroví najdete pouze to nejlepší: <strong>pravé jihočeské máslo, čerstvě mleté ořechy od prověřených pěstitelů, královské datle Medjool a pravou vanilku</strong>. Žádné umělé esence, barviva ani konzervanty.
-              </p>
-              <p>
-                Každý kousek projde mýma rukama. Věřím, že vánoční stůl si zaslouží skutečnou kvalitu, která chutná po domově.
-              </p>
-            </div>
-
-            <div class="mt-6 pt-6 border-t border-[#E8E2D8] flex items-center gap-4">
-              <div class="w-12 h-12 rounded-full bg-[#8B2635] text-white flex items-center justify-center font-serif text-xl font-bold">
-                K
-              </div>
-              <div>
-                <p class="font-bold text-sm text-[#2C2725]">Klára / Vaše jméno</p>
-                <p class="text-xs text-[#7A726C]">Cukrářka &amp; tvůrkyně sladkostí</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SEKCE 4: CELOROČNÍ NABÍDKA (Raw dorty na zakázku) -->
-    <section class="py-12 bg-white border-t border-[#E8E2D8]">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="text-center max-w-xl mx-auto mb-8">
-          <span class="text-xs font-bold uppercase tracking-wider text-[#2D4A3E]">Stálý sortiment</span>
-          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725] mt-1 mb-2">Raw dorty &amp; dezerty pro oslavy</h2>
-          <p class="text-xs sm:text-sm text-[#5A534E]">
-            Mimo vánoční sezónu tvořím narozeninové raw dorty a zákusky pro kavárny. Bez lepku, bez laktózy a bez přidaného rafinovaného cukru.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {rawCakes.map((cake) => (
-            <div class="p-4 rounded-xl border border-[#E8E2D8] bg-[#FAF7F2]">
-              <div class="rounded-lg aspect-[4/3] bg-[#E8E0D4] mb-3 flex items-center justify-center text-xs text-[#7A726C]">
-                📸 Foto: {cake.name}
-              </div>
-              <h3 class="font-serif font-bold text-base text-[#2C2725] mb-1">{cake.name}</h3>
-              <p class="text-xs text-[#5A534E] leading-relaxed mb-2">{cake.desc}</p>
-              <span class="text-[11px] text-[#7A726C] italic">{cake.allergens}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- SEKCE 5: JAK OBJEDNAT & KONTAKT -->
-    <section id="kontakt" class="py-12 sm:py-16 bg-[#FAF7F2] border-t border-[#E8E2D8]">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="max-w-xl mx-auto text-center mb-10">
-          <h2 class="font-serif text-2xl sm:text-4xl font-bold text-[#2C2725] mb-2">Jak objednat cukroví?</h2>
-          <p class="text-sm text-[#5A534E]">
-            Jednoduše a bez složitých formulářů. Stačí mi napsat zprávu nebo zavolat.
-          </p>
-        </div>
-
-        <!-- 3 kroky objednávky -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-center">
-          <div class="bg-white p-5 rounded-xl border border-[#E8E2D8]">
-            <span class="w-8 h-8 rounded-full bg-[#8B2635] text-white font-bold flex items-center justify-center mx-auto mb-2 text-sm">1</span>
-            <h3 class="font-bold text-sm text-[#2C2725] mb-1">Vyberte krabičku</h3>
-            <p class="text-xs text-[#7A726C]">Zvolte si tradiční nebo raw variantu a požadovanou hmotnost.</p>
-          </div>
-          <div class="bg-white p-5 rounded-xl border border-[#E8E2D8]">
-            <span class="w-8 h-8 rounded-full bg-[#8B2635] text-white font-bold flex items-center justify-center mx-auto mb-2 text-sm">2</span>
-            <h3 class="font-bold text-sm text-[#2C2725] mb-1">Napište zprávu</h3>
-            <p class="text-xs text-[#7A726C]">Ozvěte se mi na WhatsApp nebo zavolejte. Potvrdím vám termín.</p>
-          </div>
-          <div class="bg-white p-5 rounded-xl border border-[#E8E2D8]">
-            <span class="w-8 h-8 rounded-full bg-[#8B2635] text-white font-bold flex items-center justify-center mx-auto mb-2 text-sm">3</span>
-            <h3 class="font-bold text-sm text-[#2C2725] mb-1">Vyzvedněte v prosinci</h3>
-            <p class="text-xs text-[#7A726C]">Předání 20.–23. 12. osobně nebo po domluvě rozvoz po okolí.</p>
-          </div>
-        </div>
-
-        <!-- Rychlé kontaktní karty (Mobile-first) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <!-- WhatsApp karta -->
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-4 p-4 rounded-xl bg-white border border-[#25D366]/40 hover:border-[#25D366] transition-all shadow-sm group"
-          >
-            <div class="w-12 h-12 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition-colors">
-              <svg class="w-6 h-6 fill-current shrink-0" width="24" height="24" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.086.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider font-bold text-[#25D366]">Nejrychlejší kontakt</p>
-              <p class="font-bold text-base text-[#2C2725]">Zpráva na WhatsApp</p>
-              <p class="text-xs text-[#7A726C]">Klikněte a rovnou mi napište</p>
-            </div>
-          </a>
-
-          <!-- Telefon karta -->
-          <a 
-            href={`tel:${phoneNumber.replace(/\s+/g, '')}`}
-            class="flex items-center gap-4 p-4 rounded-xl bg-white border border-[#E8E2D8] hover:border-[#8B2635] transition-all shadow-sm group"
-          >
-            <div class="w-12 h-12 rounded-full bg-[#8B2635]/10 text-[#8B2635] flex items-center justify-center shrink-0 group-hover:bg-[#8B2635] group-hover:text-white transition-colors">
-              <svg class="w-5 h-5 shrink-0" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-            </div>
-            <div>
-              <p class="text-xs uppercase tracking-wider font-bold text-[#7A726C]">Zavolejte mi</p>
-              <p class="font-bold text-base text-[#2C2725]">{phoneNumber}</p>
-              <p class="text-xs text-[#7A726C]">Po–Ne: 9:00 – 19:00</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="py-8 bg-[#2C2725] text-white/70 text-center text-xs">
-    <div class="max-w-4xl mx-auto px-4">
-      <p class="text-white font-serif font-bold text-base mb-1">Sladké Vánoce</p>
-      <p class="mb-4 text-white/50">Ručně dělané cukroví a raw dezerty s láskou k poctivým surovinám.</p>
-      <p>© 2026 Všechna práva vyhrazena.</p>
     </div>
-  </footer>
-
-  <!-- STICKY SPODNÍ LIŠTA NA MOBILU (Bottom Quick-Action Bar) -->
-  <aside class="fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-[#E8E2D8] p-3 sm:hidden shadow-lg" aria-label="Rychlá mobilní objednávka">
-    <div class="flex items-center gap-2">
-      <a 
-        href={`tel:${phoneNumber.replace(/\s+/g, '')}`}
-        class="p-3 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] text-[#2C2725] flex items-center justify-center shrink-0 active:scale-95 transition-transform"
-        aria-label="Zavolat"
-      >
-        <svg class="w-5 h-5 shrink-0" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-      </a>
-      <a 
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="flex-1 py-3 px-4 rounded-xl bg-[#25D366] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-transform"
-      >
-        <svg class="w-5 h-5 fill-current shrink-0" width="20" height="20" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.086.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
-        <span>Objednat na WhatsApp</span>
-      </a>
-    </div>
-  </aside>
+  </section>
 </Layout>

@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { DESSERT_SLICES, DESSERT_SLICE_PRICE } from '../data/products';
+import { getWhatsAppUrl, withBase } from '../data/site';
+
+const whatsappLink = getWhatsAppUrl(
+  'Dobrý den, mám zájem o jednotlivé klínky raw dezertů (druh a počet kusů): '
+);
+---
+
+<Layout
+  title="Dezerty (klínky) | RAWTÍK – Raw dezerty ke kávě"
+  description="Jednotlivé klínky raw dezertů ke kávě za 100 Kč/ks. V nabídce vždy 3 druhy: Snickers / Slaný arašíd, Makový dezert a Ovocný dort."
+  currentPath="/dezerty"
+>
+  <section class="pt-6 pb-12 sm:pt-10 sm:pb-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <!-- Drobečková navigace -->
+      <nav aria-label="Drobečková navigace" class="text-xs sm:text-sm text-[#7A726C] mb-5">
+        <a href={withBase('/')} class="hover:text-[#8B2635]">Domů</a>
+        <span class="mx-1.5">/</span>
+        <a href={withBase('/#nabidka')} class="hover:text-[#8B2635]">Nabídka a ceník</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-[#2C2725] font-medium">Dezerty</span>
+      </nav>
+
+      <!-- 1. Úvodní foto + 2. Úvodní text + 3. Cena za klínek -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-6 space-y-4">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2635]/10 text-[#8B2635] text-xs font-bold uppercase tracking-wider">
+            Jednotlivé klínky ke kávě
+          </span>
+          <h1 class="font-serif text-3xl sm:text-5xl font-bold text-[#2C2725] leading-tight">
+            Dezerty
+          </h1>
+          <p class="text-base sm:text-lg text-[#5A534E] leading-relaxed">
+            Chcete si dát jen jeden nebo pár kousků ke kávě? V nabídce jsou vždy tři druhy jednotlivých dezertů.
+          </p>
+
+          <div class="inline-flex items-baseline gap-3 px-5 py-3 rounded-2xl bg-white border border-[#E8E2D8] shadow-xs">
+            <span class="text-sm font-semibold text-[#5A534E]">Cena za 1 klínek:</span>
+            <span class="font-serif text-3xl font-bold text-[#8B2635]">{DESSERT_SLICE_PRICE}</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div class="rounded-3xl overflow-hidden border border-[#E8E2D8] shadow-md aspect-[4/3] bg-[#F3ECE2]">
+            <img
+              src={withBase('/images/dezerty/uvodni-dezerty.webp')}
+              alt="Výběr jednotlivých klínků raw dezertů Rawtík"
+              fetchpriority="high"
+              width="1200"
+              height="900"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Jednotlivé druhy dezertů -->
+      <div class="mt-14">
+        <div class="mb-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32] mb-1">Vždy 3 druhy v nabídce</p>
+          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725]">Jednotlivé dezerty</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {
+            DESSERT_SLICES.map((slice) => (
+              <article class="rounded-2xl overflow-hidden bg-white border border-[#E8E2D8] shadow-xs flex flex-col">
+                <div class="aspect-[4/3] bg-[#F3ECE2] overflow-hidden">
+                  <img
+                    src={withBase(slice.photo.src)}
+                    alt={slice.photo.alt}
+                    loading="lazy"
+                    width="800"
+                    height="600"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between gap-3">
+                  <div>
+                    <h3 class="font-serif text-xl font-bold text-[#2C2725]">{slice.name}</h3>
+                    <p class="mt-1.5 text-sm text-[#5A534E] leading-relaxed">{slice.note}</p>
+                  </div>
+                  <p class="pt-3 border-t border-[#E8E2D8] text-sm font-bold text-[#8B2635]">
+                    1 ks: {DESSERT_SLICE_PRICE}
+                  </p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- 5. Tlačítko OBJEDNAT DEZERT -->
+      <div class="mt-14 rounded-3xl bg-[#8B2635] text-white p-7 sm:p-10 text-center space-y-4 shadow-md">
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold">Máte chuť na něco sladkého ke kávě?</h2>
+        <p class="text-sm sm:text-base text-white/85 max-w-xl mx-auto">
+          Napište nebo zavolejte a domluvíme počet kousků a vyzvednutí na Praze 7 – Holešovice.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-2">
+          <a
+            href={withBase('/#jak-objednat')}
+            class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-base font-bold bg-white text-[#8B2635] hover:bg-[#FAF7F2] transition-colors"
+          >
+            Objednat dezert
+          </a>
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-base font-bold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors"
+          >
+            Napsat na WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
