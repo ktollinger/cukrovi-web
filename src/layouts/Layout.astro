@@ -1,6 +1,10 @@
 ---
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/playfair-display';
+import '@fontsource-variable/plus-jakarta-sans';
 import '../styles/global.css';
 import HeaderDrawer from '../components/HeaderDrawer.astro';
+import FontSwitcher from '../components/FontSwitcher.astro';
 import { SITE, withBase } from '../data/site';
 
 interface Props {
@@ -18,6 +22,9 @@ const {
 const now = new Date();
 const buildTime = now.toISOString();
 const buildTimeFormatted = now.toUTCString();
+const ogImageUrl = Astro.site
+  ? new URL(withBase('/images/dorty/uvodni-dort.webp'), Astro.site).toString()
+  : withBase('/images/dorty/uvodni-dort.webp');
 ---
 
 <!doctype html>
@@ -33,47 +40,49 @@ const buildTimeFormatted = now.toUTCString();
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="cs_CZ" />
-
-    <!-- Google Fonts: Playfair Display + Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <script is:inline>
+      try {
+        if (localStorage.getItem('rawtik-preview-font') === 'playfair') {
+          document.documentElement.dataset.font = 'playfair';
+        }
+      } catch {}
+    </script>
   </head>
-  <body class="bg-[#FAF7F2] text-[#2C2725] antialiased selection:bg-[#8B2635] selection:text-white min-h-svh flex flex-col">
+  <body class="bg-cream text-ink antialiased selection:bg-brand selection:text-white min-h-svh flex flex-col">
     <HeaderDrawer currentPath={currentPath} />
 
     <main class="flex-1">
       <slot />
     </main>
 
-    <footer class="border-t border-[#E8E2D8] bg-[#F3ECE2]/70 py-10 mt-12">
-      <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[#5A534E]">
+    <footer class="border-t border-line bg-sand/60 py-10 mt-14">
+      <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink-soft">
         <div class="text-center sm:text-left">
-          <p class="font-serif font-bold text-[#8B2635] text-base">{SITE.brand}</p>
-          <p class="text-xs text-[#7A726C] mt-0.5">
+          <p class="font-display font-bold text-brand text-base tracking-wide">{SITE.brand}</p>
+          <p class="text-xs text-ink-muted mt-0.5">
             {SITE.owner} • {SITE.location} • IČO: {SITE.ico}
           </p>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-medium">
-          <a href={SITE.phoneHref} class="hover:text-[#8B2635] transition-colors">{SITE.phoneDisplay}</a>
-          <span aria-hidden="true" class="text-[#D5CDC2]">•</span>
-          <a href={`mailto:${SITE.email}`} class="hover:text-[#8B2635] transition-colors">{SITE.email}</a>
-          <span aria-hidden="true" class="text-[#D5CDC2]">•</span>
+          <a href={SITE.phoneHref} class="hover:text-brand transition-colors">{SITE.phoneDisplay}</a>
+          <span aria-hidden="true" class="text-line">•</span>
+          <a href={`mailto:${SITE.email}`} class="hover:text-brand transition-colors">{SITE.email}</a>
+          <span aria-hidden="true" class="text-line">•</span>
           <a
             href={SITE.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 hover:text-[#8B2635] transition-colors"
+            class="hover:text-brand transition-colors"
           >
             Instagram {SITE.instagramHandle}
           </a>
         </div>
       </div>
     </footer>
+
+    <FontSwitcher />
   </body>
 </html>

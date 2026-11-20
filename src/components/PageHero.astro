@@ -1,0 +1,52 @@
+---
+import PhotoPlaceholder from './ui/PhotoPlaceholder.astro';
+import { withBase } from '../data/site';
+
+interface Props {
+  title: string;
+  lead: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  viewTransitionName?: string;
+}
+
+const { title, lead, imageSrc, imageAlt = '', viewTransitionName } = Astro.props;
+---
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center">
+  <div class="lg:col-span-6 space-y-4">
+    <h1 class="font-display text-3xl sm:text-5xl font-bold text-ink leading-[1.12] tracking-tight">
+      {title}
+    </h1>
+    <p class="text-base sm:text-lg text-ink-soft leading-relaxed">
+      {lead}
+    </p>
+    <slot />
+  </div>
+
+  <div class="lg:col-span-6">
+    {
+      imageSrc ? (
+        <div
+          class="rounded-[var(--radius-card)] overflow-hidden border border-line bg-sand aspect-[4/3]"
+          style={viewTransitionName ? `view-transition-name: ${viewTransitionName}` : undefined}
+        >
+          <img
+            src={withBase(imageSrc)}
+            alt={imageAlt}
+            fetchpriority="high"
+            width="1200"
+            height="900"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <PhotoPlaceholder
+          aspect="4/3"
+          class="rounded-[var(--radius-card)]"
+          viewTransitionName={viewTransitionName}
+        />
+      )
+    }
+  </div>
+</div>

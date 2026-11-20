@@ -1,0 +1,25 @@
+---
+import Button from './ui/Button.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  buttonLabel: string;
+}
+
+const { title, description, buttonLabel } = Astro.props;
+---
+
+<div class="reveal mt-14 rounded-[var(--radius-card)] bg-sand/70 border border-line p-7 sm:p-10 text-center space-y-4">
+  <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink">
+    {title}
+  </h2>
+  <p class="text-sm sm:text-base text-ink-soft max-w-xl mx-auto leading-relaxed">
+    {description}
+  </p>
+  <div class="pt-1">
+    <Button href="/#jak-objednat" variant="primary" size="lg">
+      {buttonLabel}
+    </Button>
+  </div>
+</div>

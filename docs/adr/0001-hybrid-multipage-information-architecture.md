@@ -22,6 +22,7 @@ Additionally, *Vánoční cukroví* is seasonal: it is the primary hero and firs
 Adopt a **hybrid multi-page architecture**:
 
 - **Landing page (`/`):** Contains the Hero (*Domů*), the 3-card *Nabídka a ceník* hub (`#nabidka`), *O nás* (`#o-nas`), *Jak objednat a převzetí* (`#jak-objednat`), and *Kontakt* (`#kontakt`).
+- **Responsive navigation:** Mobile and tablet (`< 1024 px`) use the slide-in hamburger drawer; desktop (`>= 1024 px`) displays inline top-level links with a native `popover` dropdown for *Nabídka a ceník*.
 - **Dedicated category pages:** `/vanocni-cukrovi`, `/cele-dorty`, and `/dezerty`, each following Andrea's exact section structure and linking all order CTAs back to `/#jak-objednat`.
 - **Base-path safety:** All internal URLs and asset paths pass through `withBase()` in `src/data/site.ts` so routes work identically on `localhost`, GitHub Pages (`/rawtik/`), and a future custom domain (`/`).
 - **Seasonal flag:** Control Christmas prominence via `SITE.christmasSeason` in `src/data/site.ts`.

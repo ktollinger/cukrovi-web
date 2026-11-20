@@ -1,17 +1,31 @@
 @import "tailwindcss";
 
+@theme {
+  --color-cream: #faf7f2;
+  --color-surface: #ffffff;
+  --color-sand: #f3ece2;
+  --color-ink: #2c2725;
+  --color-ink-soft: #5a534e;
+  --color-ink-muted: #6b635d;
+  --color-brand: #8b2635;
+  --color-brand-hover: #721e2b;
+  --color-ginger: #c58b55;
+  --color-cinnamon: #9a5b32;
+  --color-line: #e8e2d8;
+
+  --font-sans: 'Plus Jakarta Sans Variable', system-ui, -apple-system, sans-serif;
+  --font-display: var(--display-face), Georgia, serif;
+
+  --radius-card: 1rem;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
-  --bg-cream: #faf7f2;
-  --bg-surface: #ffffff;
-  --bg-warm: #f3ece2;
-  --text-primary: #2c2725;
-  --text-secondary: #5a534e;
-  --text-muted: #7a726c;
-  --accent-burgundy: #8b2635;
-  --accent-burgundy-hover: #721e2b;
-  --accent-gingerbread: #c58b55;
-  --accent-cinnamon: #9a5b32;
-  --border-warm: #e8e2d8;
+  --display-face: 'Fraunces Variable';
+}
+
+:root[data-font='playfair'] {
+  --display-face: 'Playfair Display Variable';
 }
 
 @layer base {
@@ -21,13 +35,48 @@
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-cream);
-    color: var(--text-primary);
+    font-family: var(--font-sans);
+    background-color: var(--color-cream);
+    color: var(--color-ink);
   }
 
-  .font-serif {
-    font-family: 'Playfair Display', Georgia, serif;
+  .font-serif,
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* ==========================================================================
+   State-Aware Sticky Header (Scroll State Query + Progressive Enhancement)
+   ========================================================================== */
+.StickyHeaderWrap {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  container-type: scroll-state;
+  container-name: site-header;
+}
+
+.StickyHeader {
+  background-color: color-mix(in srgb, var(--color-cream) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-line);
+  transition: box-shadow 200ms var(--ease-out-soft), background-color 200ms var(--ease-out-soft);
+}
+
+.StickyHeaderInner {
+  height: 4rem;
+  transition: height 200ms var(--ease-out-soft);
+}
+
+@container site-header scroll-state(stuck: top) {
+  .StickyHeader {
+    background-color: color-mix(in srgb, var(--color-cream) 98%, transparent);
+    box-shadow: 0 4px 20px rgb(44 39 37 / 0.08);
+  }
+
+  .StickyHeaderInner {
+    height: 3.5rem;
   }
 }
 
@@ -87,9 +136,9 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100svh;
-  background: var(--bg-cream);
-  color: var(--text-primary);
-  border-right: 1px solid var(--border-warm);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  border-right: 1px solid var(--color-line);
   box-shadow: 4px 0 24px rgb(44 39 37 / 0.14);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -125,25 +174,150 @@
 }
 
 /* ==========================================================================
-   Native Cake Detail Modal (<dialog closedby="any"> + Scroll Containment)
+   Cake Detail Modal (Mobile Bottom Sheet + Desktop Centered + Swipe Gallery)
    ========================================================================== */
-dialog.CakeModal:modal {
-  overscroll-behavior: contain;
-  margin: auto;
+dialog.CakeModal {
+  margin: auto 0 0;
   padding: 0;
-  border: 1px solid var(--border-warm);
-  border-radius: 1.25rem;
-  background: var(--bg-surface);
-  color: var(--text-primary);
-  width: min(44rem, calc(100dvw - 1.5rem));
-  max-height: calc(100svh - 2rem);
+  border: 1px solid var(--color-line);
+  border-bottom: 0;
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  width: 100%;
+  max-width: 100%;
+  max-height: 92svh;
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgb(44 39 37 / 0.28);
+  overscroll-behavior: contain;
+  box-shadow: 0 -12px 40px rgb(44 39 37 / 0.22);
+}
+
+@media (min-width: 640px) {
+  dialog.CakeModal {
+    margin: auto;
+    border-bottom: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    width: min(44rem, calc(100dvw - 2rem));
+    max-height: calc(100svh - 2rem);
+    box-shadow: 0 24px 60px rgb(44 39 37 / 0.28);
+  }
 }
 
 dialog.CakeModal::backdrop {
-  background: rgb(26 20 18 / 0.62);
+  background: rgb(26 20 18 / 0.6);
   backdrop-filter: blur(3px);
   overflow: hidden;
   overscroll-behavior: contain;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.CakeModal {
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+      opacity 200ms var(--ease-out-soft),
+      translate 220ms var(--ease-out-soft),
+      display 220ms allow-discrete,
+      overlay 220ms allow-discrete;
+  }
+
+  dialog.CakeModal[open] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @starting-style {
+    dialog.CakeModal[open] {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    dialog.CakeModal {
+      translate: 0 8px;
+    }
+
+    @starting-style {
+      dialog.CakeModal[open] {
+        opacity: 0;
+        translate: 0 8px;
+      }
+    }
+  }
+}
+
+.GalleryTrack {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.GalleryTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.GallerySlide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* ==========================================================================
+   CSS-Only Cake Category Filter (:has())
+   ========================================================================== */
+.CakeCatalog:has(#filter-ovocny:checked) [data-cake-category='neovocny'],
+.CakeCatalog:has(#filter-neovocny:checked) [data-cake-category='ovocny'] {
+  display: none;
+}
+
+/* ==========================================================================
+   Motion: Cross-Document View Transitions & Scroll-Driven Reveal
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: 160ms var(--ease-out-soft) both vt-fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 220ms var(--ease-out-soft) both vt-fade-in;
+  }
+
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
 }

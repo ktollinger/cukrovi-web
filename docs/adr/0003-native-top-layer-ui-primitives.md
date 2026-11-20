@@ -21,8 +21,8 @@ Introducing a frontend JS framework (React/Vue) solely for a drawer and a modal 
 
 ## Proposed Decision
 
-- Implement the mobile navigation drawer in [src/components/HeaderDrawer.astro](file:///Users/kamil/repos/rawtik/src/components/HeaderDrawer.astro) using a modal `<dialog>` with CSS scroll-snap, `@supports (animation-timeline: scroll())` backdrop fade, `IntersectionObserver` state sync, and progressive fallbacks for Safari/Firefox (`scroll-initial-target` and scroll-listener backdrop fallback).
-- Implement the cake gallery modal in [src/components/CakeDetailModal.astro](file:///Users/kamil/repos/rawtik/src/components/CakeDetailModal.astro) using `<dialog closedby="any">` with a JS backdrop-click fallback for browsers without `closedBy` support (Safari) and CSS `overscroll-behavior: contain` on both `dialog:modal` and `dialog::backdrop` (`overflow: hidden`).
+- Implement the mobile navigation drawer in [src/components/HeaderDrawer.astro](file:///Users/kamil/repos/rawtik/src/components/HeaderDrawer.astro) using a modal `<dialog>` with CSS scroll-snap, `@supports (animation-timeline: scroll())` backdrop fade, `IntersectionObserver` state sync, and progressive fallbacks for Safari/Firefox (`scroll-initial-target` and scroll-listener backdrop fallback). On desktop (`>= 1024 px`), use a native `popover="auto"` dropdown for the *Nabídka a ceník* submenu.
+- Implement the cake gallery modal in [src/components/CakeDetailModal.astro](file:///Users/kamil/repos/rawtik/src/components/CakeDetailModal.astro) using `<dialog closedby="any">` (presented as a bottom sheet on mobile and centered modal on desktop with `@starting-style` + `allow-discrete` entry/exit transitions), a horizontal CSS scroll-snap swipe gallery synced with `IntersectionObserver` dots and desktop prev/next buttons, a JS backdrop-click fallback for browsers without `closedBy` support (Safari), and CSS `overscroll-behavior: contain` on both `dialog:modal` and `dialog::backdrop` (`overflow: hidden`).
 
 ## Alternatives Considered
 

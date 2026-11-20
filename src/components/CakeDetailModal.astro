@@ -1,6 +1,7 @@
 ---
+import Button from './ui/Button.astro';
 import { CAKE_PRICES, WHOLE_CAKES } from '../data/products';
-import { getWhatsAppUrl, withBase } from '../data/site';
+import { withBase } from '../data/site';
 
 const cakesWithBase = WHOLE_CAKES.map((cake) => ({
   ...cake,
@@ -8,11 +9,9 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
     ...photo,
     src: withBase(photo.src),
   })),
-  whatsappUrl: getWhatsAppUrl(`Dobrý den, ráda bych si objednala ${cake.name} (velikost 18 cm / 24 cm): `),
 }));
 ---
 
-<!-- Nativní modal s light-dismiss (closedby="any" + fallback pro Safari) -->
 <dialog
   id="cake-detail-dialog"
   class="CakeModal"
@@ -20,21 +19,21 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
   aria-labelledby="cake-modal-title"
 >
   <div class="p-4 sm:p-6">
-    <div class="flex items-start justify-between gap-4 pb-3 border-b border-[#E8E2D8]">
+    <!-- Úchyt pro mobilní spodní panel -->
+    <div class="sm:hidden w-10 h-1 rounded-full bg-line mx-auto mb-3" aria-hidden="true"></div>
+
+    <div class="flex items-start justify-between gap-4 pb-3 border-b border-line">
       <div>
-        <span
-          id="cake-modal-category"
-          class="inline-block text-[11px] font-bold uppercase tracking-wider text-[#9A5B32] mb-1"
-        ></span>
-        <h3 id="cake-modal-title" class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725]"></h3>
+        <span id="cake-modal-category" class="block text-xs font-semibold text-cinnamon mb-0.5"></span>
+        <h3 id="cake-modal-title" class="font-display text-2xl sm:text-3xl font-bold text-ink"></h3>
       </div>
       <form method="dialog">
         <button
           type="submit"
           aria-label="Zavřít detail dortu"
-          class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] text-[#2C2725] hover:text-[#8B2635] hover:border-[#8B2635] transition-colors cursor-pointer"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-cream border border-line text-ink hover:text-brand hover:border-brand transition-colors cursor-pointer"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
@@ -42,32 +41,44 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
       </form>
     </div>
 
-    <!-- Hlavní fotografie v modalu -->
-    <div class="mt-4">
-      <div class="relative rounded-2xl overflow-hidden bg-[#F3ECE2] aspect-[4/3]">
-        <img
-          id="cake-modal-main-img"
-          src=""
-          alt=""
-          fetchpriority="low"
-          class="w-full h-full object-cover"
-        />
-        <p
-          id="cake-modal-caption"
-          class="absolute bottom-2 left-2 right-2 px-3 py-1.5 rounded-lg bg-[#2C2725]/75 text-white text-xs backdrop-blur-xs empty:hidden"
-        ></p>
-      </div>
+    <!-- Swipovatelná galerie (scroll-snap) + šipky pro desktop + tečky -->
+    <div class="mt-4 relative">
+      <div
+        id="cake-modal-track"
+        class="GalleryTrack rounded-[var(--radius-card)] bg-sand aspect-[4/3] border border-line"
+      ></div>
 
-      <!-- Náhledy dalších fotek (zobrazí se, pokud má dort více než 1 foto) -->
-      <div id="cake-modal-thumbs" class="mt-3 flex gap-2 overflow-x-auto pb-1"></div>
+      <button
+        id="cake-modal-prev"
+        type="button"
+        aria-label="Předchozí fotografie"
+        class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface/90 border border-line text-ink hover:text-brand shadow-sm absolute left-2.5 top-1/2 -translate-y-1/2 cursor-pointer"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+
+      <button
+        id="cake-modal-next"
+        type="button"
+        aria-label="Další fotografie"
+        class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full bg-surface/90 border border-line text-ink hover:text-brand shadow-sm absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+
+      <div id="cake-modal-dots" class="mt-3 flex items-center justify-center gap-1.5 min-h-4"></div>
     </div>
 
     <!-- Složení a ceník -->
-    <div class="mt-5 space-y-4">
-      <div class="rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] p-4">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-[#9A5B32] mb-1.5">Složení</h4>
-        <p id="cake-modal-ingredients" class="text-sm sm:text-base text-[#2C2725] leading-relaxed"></p>
-        <p class="mt-2 text-xs text-[#7A726C]">
+    <div class="mt-4 space-y-4">
+      <div class="rounded-xl bg-cream border border-line p-4">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-cinnamon mb-1">Složení</h4>
+        <p id="cake-modal-ingredients" class="text-sm sm:text-base text-ink leading-relaxed"></p>
+        <p class="mt-2 text-xs text-ink-muted">
           Přirozeně bez lepku a laktózy, slazeno pouze raw medem a datlemi.
         </p>
       </div>
@@ -75,32 +86,19 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
       <div class="grid grid-cols-3 gap-2 text-center">
         {
           CAKE_PRICES.map((row) => (
-            <div class="rounded-xl bg-[#FAF7F2] border border-[#E8E2D8] p-2.5">
-              <p class="text-xs font-semibold text-[#5A534E]">{row.label}</p>
-              <p class="font-serif text-base sm:text-lg font-bold text-[#8B2635] mt-0.5">{row.price}</p>
-              <p class="text-[11px] text-[#7A726C]">{row.portions}</p>
+            <div class="rounded-xl bg-cream border border-line p-2.5">
+              <p class="text-xs font-semibold text-ink-soft">{row.label}</p>
+              <p class="font-display text-base sm:text-lg font-bold text-brand mt-0.5">{row.price}</p>
+              <p class="text-xs text-ink-muted">{row.portions}</p>
             </div>
           ))
         }
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-2.5 pt-1">
-        <a
-          id="cake-modal-wa"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors"
-        >
-          Objednat tento dort přes WhatsApp
-        </a>
-        <a
-          href={withBase('/#jak-objednat')}
-          data-close-modal
-          class="inline-flex items-center justify-center px-5 py-3 rounded-xl text-sm font-semibold bg-[#8B2635] text-white hover:bg-[#721E2B] transition-colors"
-        >
-          Jak objednat
-        </a>
+      <div class="pt-1">
+        <Button href="/#jak-objednat" variant="primary" size="lg" class="w-full" data-close-modal>
+          Objednat dort
+        </Button>
       </div>
     </div>
   </div>
@@ -120,7 +118,6 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
     category: 'ovocny' | 'neovocny';
     ingredients: string;
     photos: CakePhoto[];
-    whatsappUrl: string;
   }
 
   const dataEl = document.getElementById('cakes-catalog-data');
@@ -128,26 +125,34 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
   const titleEl = document.getElementById('cake-modal-title');
   const catEl = document.getElementById('cake-modal-category');
   const ingEl = document.getElementById('cake-modal-ingredients');
-  const mainImg = document.getElementById('cake-modal-main-img') as HTMLImageElement | null;
-  const captionEl = document.getElementById('cake-modal-caption');
-  const thumbsEl = document.getElementById('cake-modal-thumbs');
-  const waEl = document.getElementById('cake-modal-wa') as HTMLAnchorElement | null;
+  const trackEl = document.getElementById('cake-modal-track');
+  const dotsEl = document.getElementById('cake-modal-dots');
+  const prevBtn = document.getElementById('cake-modal-prev') as HTMLButtonElement | null;
+  const nextBtn = document.getElementById('cake-modal-next') as HTMLButtonElement | null;
 
-  if (dataEl && dialog && titleEl && catEl && ingEl && mainImg && captionEl && thumbsEl && waEl) {
+  if (dataEl && dialog && titleEl && catEl && ingEl && trackEl && dotsEl && prevBtn && nextBtn) {
     const cakes: CakeRecord[] = JSON.parse(dataEl.textContent || '[]');
     const cakeById = new Map(cakes.map((c) => [c.id, c]));
+    let slideObserver: IntersectionObserver | null = null;
+    let activeSlideIndex = 0;
 
-    function selectPhoto(photo: CakePhoto, activeIndex: number) {
-      mainImg!.src = photo.src;
-      mainImg!.alt = photo.alt;
-      captionEl!.textContent = photo.caption || '';
-
-      thumbsEl!.querySelectorAll('button').forEach((btn, idx) => {
-        btn.setAttribute('aria-current', idx === activeIndex ? 'true' : 'false');
-        btn.classList.toggle('ring-2', idx === activeIndex);
-        btn.classList.toggle('ring-[#8B2635]', idx === activeIndex);
-        btn.classList.toggle('opacity-70', idx !== activeIndex);
+    function setActiveDot(index: number) {
+      activeSlideIndex = index;
+      dotsEl!.querySelectorAll('button').forEach((dot, idx) => {
+        const current = idx === index;
+        dot.setAttribute('aria-current', String(current));
+        dot.classList.toggle('bg-brand', current);
+        dot.classList.toggle('w-5', current);
+        dot.classList.toggle('bg-line', !current);
+        dot.classList.toggle('w-2', !current);
       });
+    }
+
+    function scrollToSlide(index: number) {
+      const slide = trackEl!.children[index] as HTMLElement | undefined;
+      if (slide) {
+        trackEl!.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+      }
     }
 
     function openCakeModal(cakeId: string) {
@@ -157,34 +162,78 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
       titleEl!.textContent = cake.name;
       catEl!.textContent = cake.category === 'ovocny' ? 'Ovocný raw dort' : 'Neovocný raw dort';
       ingEl!.textContent = cake.ingredients;
-      waEl!.href = cake.whatsappUrl;
 
-      thumbsEl!.innerHTML = '';
-      if (cake.photos.length > 1) {
-        cake.photos.forEach((photo, idx) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className =
-            'shrink-0 w-18 h-14 rounded-lg overflow-hidden border border-[#E8E2D8] cursor-pointer transition-all';
-          btn.setAttribute('aria-label', photo.caption || `${cake.name} – foto ${idx + 1}`);
-          const img = document.createElement('img');
-          img.src = photo.src;
-          img.alt = photo.alt;
-          img.loading = 'lazy';
-          img.fetchPriority = 'low';
-          img.className = 'w-full h-full object-cover';
-          btn.appendChild(img);
-          btn.addEventListener('click', () => selectPhoto(photo, idx));
-          thumbsEl!.appendChild(btn);
-        });
+      slideObserver?.disconnect();
+      trackEl!.innerHTML = '';
+      dotsEl!.innerHTML = '';
+      activeSlideIndex = 0;
+
+      const hasMultiple = cake.photos.length > 1;
+      prevBtn!.style.display = hasMultiple ? '' : 'none';
+      nextBtn!.style.display = hasMultiple ? '' : 'none';
+
+      cake.photos.forEach((photo, idx) => {
+        const slide = document.createElement('div');
+        slide.className = 'GallerySlide relative w-full h-full';
+
+        const img = document.createElement('img');
+        img.src = photo.src;
+        img.alt = photo.alt;
+        img.fetchPriority = idx === 0 ? 'auto' : 'low';
+        if (idx > 0) img.loading = 'lazy';
+        img.className = 'w-full h-full object-cover';
+        slide.appendChild(img);
+
+        if (photo.caption) {
+          const cap = document.createElement('p');
+          cap.textContent = photo.caption;
+          cap.className =
+            'absolute bottom-2.5 left-2.5 px-3 py-1 rounded-lg bg-ink/75 text-white text-xs backdrop-blur-xs';
+          slide.appendChild(cap);
+        }
+
+        trackEl!.appendChild(slide);
+
+        if (hasMultiple) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'h-2 rounded-full transition-all cursor-pointer';
+          dot.setAttribute('aria-label', `Zobrazit fotografii ${idx + 1}`);
+          dot.addEventListener('click', () => scrollToSlide(idx));
+          dotsEl!.appendChild(dot);
+        }
+      });
+
+      if (hasMultiple) {
+        setActiveDot(0);
+        slideObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+                const idx = Array.from(trackEl!.children).indexOf(entry.target);
+                if (idx >= 0) setActiveDot(idx);
+              }
+            });
+          },
+          { root: trackEl, threshold: 0.6 }
+        );
+        Array.from(trackEl!.children).forEach((el) => slideObserver!.observe(el));
       }
 
-      if (cake.photos[0]) {
-        selectPhoto(cake.photos[0], 0);
-      }
-
+      trackEl!.scrollLeft = 0;
       dialog!.showModal();
     }
+
+    prevBtn.addEventListener('click', () => {
+      const next = Math.max(0, activeSlideIndex - 1);
+      scrollToSlide(next);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const count = trackEl.children.length;
+      const next = Math.min(count - 1, activeSlideIndex + 1);
+      scrollToSlide(next);
+    });
 
     document.querySelectorAll<HTMLElement>('[data-open-cake]').forEach((trigger) => {
       trigger.addEventListener('click', () => {
@@ -197,7 +246,6 @@ const cakesWithBase = WHOLE_CAKES.map((cake) => ({
       el.addEventListener('click', () => dialog.close());
     });
 
-    // Mandatory fallback for browsers without <dialog closedby="any"> support (e.g. Safari)
     if (!('closedBy' in HTMLDialogElement.prototype)) {
       dialog.addEventListener('click', (event) => {
         if (event.target !== dialog) return;

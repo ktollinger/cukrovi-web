@@ -9,93 +9,135 @@ const { currentPath = '/' } = Astro.props;
 const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Rawtík: ');
 ---
 
-<!-- Pevný horní panel dle návrhu: RAWTÍK | telefon + WhatsApp | hamburger menu -->
-<header class="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#E8E2D8]">
-  <div class="max-w-5xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
-    <!-- Logo RAWTÍK -->
-    <a
-      href={withBase('/')}
-      class="flex items-center gap-2 shrink-0 group focus-visible:outline-2 focus-visible:outline-[#8B2635] rounded-lg px-1"
-      aria-label="RAWTÍK – domů"
-    >
-      <span
-        class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#8B2635]/10 text-[#8B2635] group-hover:bg-[#8B2635] group-hover:text-white transition-colors"
-        aria-hidden="true"
+<div class="StickyHeaderWrap">
+  <header class="StickyHeader">
+    <div class="StickyHeaderInner max-w-5xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-3">
+      <!-- Wordmark RAWTÍK -->
+      <a
+        href={withBase('/')}
+        class="font-display text-xl sm:text-2xl font-bold tracking-wide text-brand shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand rounded-md"
+        aria-label="RAWTÍK – domů"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" />
-          <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1" />
-          <path d="M2 21h20" />
-          <path d="M7 8v3" />
-          <path d="M12 8v3" />
-          <path d="M17 8v3" />
-          <path d="M12 4a1 1 0 0 0 0 2" />
-        </svg>
-      </span>
-      <span class="font-serif text-lg sm:text-xl font-bold tracking-wide text-[#8B2635]">
         {SITE.brand}
-      </span>
-    </a>
-
-    <!-- Rychlý kontakt v horní liště (telefon + WhatsApp) -->
-    <div class="flex items-center gap-1.5 sm:gap-2.5">
-      <a
-        href={SITE.phoneHref}
-        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-[#2C2725] bg-white border border-[#E8E2D8] hover:border-[#C58B55] hover:text-[#8B2635] transition-colors"
-        aria-label={`Zavolat na ${SITE.phoneDisplay}`}
-      >
-        <svg class="w-3.5 h-3.5 text-[#8B2635] shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-        </svg>
-        <span class="hidden xs:inline sm:inline">{SITE.phoneShort}</span>
       </a>
 
-      <a
-        href={whatsappLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors shadow-xs"
-        aria-label="Napsat na WhatsApp"
-      >
-        <svg class="w-4 h-4 fill-current shrink-0" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.086.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z" />
-        </svg>
-        <span class="hidden sm:inline">WhatsApp</span>
-      </a>
+      <!-- Desktop navigace (≥ 1024 px) -->
+      <nav aria-label="Hlavní navigace" class="hidden lg:flex items-center gap-6 text-sm font-medium text-ink-soft">
+        {
+          NAV_ITEMS.map((item) =>
+            'children' in item ? (
+              <div class="relative">
+                <button
+                  type="button"
+                  popovertarget="desktop-offer-menu"
+                  class="inline-flex items-center gap-1 py-1.5 hover:text-brand transition-colors cursor-pointer"
+                >
+                  <span>{item.label}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <div
+                  id="desktop-offer-menu"
+                  popover="auto"
+                  class="m-0 mt-2 p-2 rounded-2xl bg-surface border border-line shadow-lg w-56"
+                >
+                  <a
+                    href={withBase(item.path)}
+                    class="block px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider text-ink-muted hover:bg-sand hover:text-brand transition-colors"
+                  >
+                    Celá nabídka
+                  </a>
+                  <hr class="my-1 border-line" />
+                  {item.children.map((child) => (
+                    <a
+                      href={withBase(child.path)}
+                      class:list={[
+                        'block px-3 py-2 rounded-xl text-sm transition-colors',
+                        currentPath === child.path
+                          ? 'bg-brand/10 text-brand font-semibold'
+                          : 'text-ink hover:bg-sand hover:text-brand',
+                      ]}
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <a
+                href={withBase(item.path)}
+                class:list={[
+                  'py-1.5 transition-colors hover:text-brand',
+                  currentPath === item.path ? 'text-brand font-semibold' : '',
+                ]}
+              >
+                {item.label}
+              </a>
+            )
+          )
+        }
+      </nav>
 
-      <!-- Hamburger tlačítko pro otevření nativního draweru -->
-      <button
-        id="drawer-open"
-        type="button"
-        aria-label="Otevřít menu"
-        aria-expanded="false"
-        aria-controls="nav-drawer"
-        class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-[#E8E2D8] text-[#2C2725] hover:border-[#8B2635] hover:text-[#8B2635] transition-colors cursor-pointer"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-          <line x1="4" y1="6" x2="20" y2="6" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="18" x2="20" y2="18" />
-        </svg>
-      </button>
+      <!-- Rychlý kontakt (ikony ve značkové barvě) + mobilní hamburger -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <a
+          href={SITE.phoneHref}
+          class="inline-flex items-center gap-1.5 h-9 px-2.5 sm:px-3 rounded-full text-xs sm:text-sm font-medium text-brand bg-surface border border-line hover:border-ginger transition-colors"
+          aria-label={`Zavolat na ${SITE.phoneDisplay}`}
+        >
+          <svg class="w-4 h-4 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span class="hidden sm:inline text-ink">{SITE.phoneShort}</span>
+        </a>
+
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-full text-brand bg-surface border border-line hover:border-ginger transition-colors"
+          aria-label="Napsat na WhatsApp"
+        >
+          <svg class="w-4 h-4 fill-current" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.297.144.35.491 1.199.534 1.286.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.086.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z" />
+          </svg>
+        </a>
+
+        <!-- Hamburger jen na mobilu a tabletu (< 1024 px) -->
+        <button
+          id="drawer-open"
+          type="button"
+          aria-label="Otevřít menu"
+          aria-expanded="false"
+          aria-controls="nav-drawer"
+          class="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-xl bg-surface border border-line text-ink hover:border-brand hover:text-brand transition-colors cursor-pointer"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="4" y1="6" x2="20" y2="6" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="18" x2="20" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
+</div>
 
-<!-- Nativní top-layer Navigation Drawer (<dialog> + CSS scroll-snap) -->
+<!-- Mobilní Navigation Drawer (<dialog> + CSS scroll-snap) -->
 <dialog class="Drawer" id="nav-drawer" aria-label="Hlavní navigace">
   <div class="Drawer-scroller">
     <nav class="Drawer-sheet" aria-label="Navigační menu">
-      <div class="flex items-center justify-between px-5 h-16 border-b border-[#E8E2D8]">
-        <span class="font-serif text-xl font-bold text-[#8B2635] tracking-wide">{SITE.brand}</span>
+      <div class="flex items-center justify-between px-5 h-16 border-b border-line">
+        <span class="font-display text-xl font-bold text-brand tracking-wide">{SITE.brand}</span>
         <button
           id="drawer-close"
           type="button"
           aria-label="Zavřít menu"
           autofocus
-          class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white border border-[#E8E2D8] text-[#2C2725] hover:text-[#8B2635] hover:border-[#8B2635] transition-colors cursor-pointer"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-surface border border-line text-ink hover:text-brand hover:border-brand transition-colors cursor-pointer"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
@@ -108,28 +150,24 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
             <li>
               {'children' in item ? (
                 <details open class="group">
-                  <summary class="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer list-none hover:bg-[#F3ECE2] text-[#2C2725] font-semibold">
-                    <a
-                      href={withBase(item.path)}
-                      data-drawer-link
-                      class="hover:text-[#8B2635] transition-colors"
-                    >
+                  <summary class="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer list-none hover:bg-sand text-ink font-semibold">
+                    <a href={withBase(item.path)} data-drawer-link class="hover:text-brand transition-colors">
                       {item.label}
                     </a>
                     <svg
-                      class="w-4 h-4 text-[#7A726C] transition-transform group-open:rotate-180"
+                      class="w-4 h-4 text-ink-muted transition-transform group-open:rotate-180"
                       width="16"
                       height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2.2"
+                      stroke-width="2"
                       aria-hidden="true"
                     >
                       <path d="M6 9l6 6 6-6" />
                     </svg>
                   </summary>
-                  <ul class="mt-1 ml-3 pl-3 border-l-2 border-[#C58B55]/50 space-y-1">
+                  <ul class="mt-1 ml-3 pl-3 border-l-2 border-ginger/50 space-y-1">
                     {item.children.map((child) => {
                       const isActive = currentPath === child.path;
                       return (
@@ -140,8 +178,8 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
                             class:list={[
                               'block px-3 py-2 rounded-lg text-sm transition-colors',
                               isActive
-                                ? 'bg-[#8B2635] text-white font-semibold'
-                                : 'text-[#5A534E] hover:bg-[#F3ECE2] hover:text-[#8B2635]',
+                                ? 'bg-brand text-white font-semibold'
+                                : 'text-ink-soft hover:bg-sand hover:text-brand',
                             ]}
                           >
                             {child.label}
@@ -158,8 +196,8 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
                   class:list={[
                     'block px-3 py-2.5 rounded-xl transition-colors font-semibold',
                     currentPath === item.path
-                      ? 'bg-[#8B2635]/10 text-[#8B2635]'
-                      : 'text-[#2C2725] hover:bg-[#F3ECE2] hover:text-[#8B2635]',
+                      ? 'bg-brand/10 text-brand'
+                      : 'text-ink hover:bg-sand hover:text-brand',
                   ]}
                 >
                   {item.label}
@@ -170,18 +208,17 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
         }
       </ul>
 
-      <div class="p-4 border-t border-[#E8E2D8] bg-[#F3ECE2]/60 space-y-2">
+      <div class="p-4 border-t border-line bg-sand/60 space-y-2">
         <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-sm font-bold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors"
+          href={withBase('/#jak-objednat')}
+          data-drawer-link
+          class="flex items-center justify-center w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-brand text-white hover:bg-brand-hover transition-colors"
         >
-          Napsat na WhatsApp
+          Objednat
         </a>
         <a
           href={SITE.phoneHref}
-          class="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-xl text-sm font-semibold bg-white border border-[#E8E2D8] text-[#2C2725] hover:border-[#C58B55] transition-colors"
+          class="flex items-center justify-center w-full py-2 px-4 rounded-xl text-sm font-medium bg-surface border border-line text-ink hover:border-ginger transition-colors"
         >
           {SITE.phoneDisplay}
         </a>
@@ -191,6 +228,20 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
 </dialog>
 
 <script>
+  // Desktop popover positioning fallback for browsers without anchor positioning
+  const offerBtn = document.querySelector<HTMLButtonElement>('[popovertarget="desktop-offer-menu"]');
+  const offerMenu = document.getElementById('desktop-offer-menu');
+  if (offerBtn && offerMenu) {
+    offerMenu.addEventListener('beforetoggle', (e) => {
+      if ((e as ToggleEvent).newState === 'open') {
+        const rect = offerBtn.getBoundingClientRect();
+        offerMenu.style.position = 'fixed';
+        offerMenu.style.top = `${rect.bottom + 8}px`;
+        offerMenu.style.left = `${rect.left}px`;
+      }
+    });
+  }
+
   const drawer = document.getElementById('nav-drawer') as HTMLDialogElement | null;
   const openBtn = document.getElementById('drawer-open') as HTMLButtonElement | null;
   const closeBtn = document.getElementById('drawer-close') as HTMLButtonElement | null;

@@ -1,121 +1,88 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import OrderSection from '../components/OrderSection.astro';
+import Button from '../components/ui/Button.astro';
+import PhotoPlaceholder from '../components/ui/PhotoPlaceholder.astro';
 import { ABOUT_PARAGRAPHS, OFFER_CATEGORIES } from '../data/products';
-import { SITE, getWhatsAppUrl, withBase } from '../data/site';
-
-const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Rawtík: ');
+import { SITE, withBase } from '../data/site';
 ---
 
 <Layout
   title="RAWTÍK – Vánoční cukroví & raw dorty bez výčitek | Praha 7"
   currentPath="/"
 >
-  <!-- 1. DOMŮ (Úvodní Hero) -->
-  <section class="pt-8 pb-12 sm:pt-14 sm:pb-16 border-b border-[#E8E2D8]">
+  <!-- 1. DOMŮ (Úvodní Hero s jemným tónovým přechodem krém → perník) -->
+  <section class="pt-8 pb-12 sm:pt-14 sm:pb-16 border-b border-line bg-gradient-to-b from-cream to-sand/45">
     <div class="max-w-5xl mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         <div class="lg:col-span-6">
           {
             SITE.christmasSeason && (
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2635]/10 text-[#8B2635] text-xs font-bold uppercase tracking-wider mb-4">
-                <span aria-hidden="true">●</span> Vánoce 2026 • Ruční výroba v Holešovicích
-              </div>
+              <p class="text-xs font-bold uppercase tracking-widest text-cinnamon mb-3">
+                Vánoce 2026 • Ruční výroba v Holešovicích
+              </p>
             )
           }
 
-          <h1 class="font-serif text-4xl sm:text-5xl font-bold text-[#2C2725] leading-[1.12] tracking-tight">
+          <h1 class="font-display text-4xl sm:text-5xl font-bold text-ink leading-[1.1] tracking-tight">
             {
               SITE.christmasSeason ? (
                 <>
-                  Vánoční cukroví <span class="text-[#8B2635] italic font-normal">bez výčitek</span>
+                  Vánoční cukroví <span class="text-brand italic font-normal">bez výčitek</span>
                 </>
               ) : (
                 <>
-                  Raw dorty <span class="text-[#8B2635] italic font-normal">bez výčitek</span>
+                  Raw dorty <span class="text-brand italic font-normal">bez výčitek</span>
                 </>
               )
             }
           </h1>
 
-          <ul class="mt-6 space-y-3 text-base text-[#5A534E]">
+          <ul class="mt-6 space-y-2.5 text-base text-ink-soft">
             <li class="flex items-start gap-2.5">
-              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
-              <span>Z kvalitních surovin, slazené pouze <strong>datlemi a medem od včelaře</strong></span>
+              <span class="mt-2 w-1.5 h-1.5 rounded-full bg-ginger shrink-0" aria-hidden="true"></span>
+              <span>Z kvalitních surovin, slazené pouze <strong class="text-ink">datlemi a medem od včelaře</strong></span>
             </li>
             <li class="flex items-start gap-2.5">
-              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
+              <span class="mt-2 w-1.5 h-1.5 rounded-full bg-ginger shrink-0" aria-hidden="true"></span>
               <span>Výborná chuť a složení, ze kterého bude mít radost i vaše tělo</span>
             </li>
             <li class="flex items-start gap-2.5">
-              <span class="mt-2 w-2 h-2 rounded-full bg-[#C58B55] shrink-0" aria-hidden="true"></span>
-              <span>Přirozeně <strong>bez lepku i laktózy</strong></span>
+              <span class="mt-2 w-1.5 h-1.5 rounded-full bg-ginger shrink-0" aria-hidden="true"></span>
+              <span>Přirozeně <strong class="text-ink">bez lepku i laktózy</strong></span>
             </li>
           </ul>
 
-          <div class="mt-7 flex flex-col sm:flex-row gap-3">
-            <a
-              href="#nabidka"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-[#8B2635] text-white hover:bg-[#721E2B] active:scale-[0.98] transition-all shadow-md shadow-[#8B2635]/20"
-            >
+          <div class="mt-7">
+            <Button href="#nabidka" variant="primary" size="lg" class="w-full sm:w-auto">
               <span>Prohlédnout nabídku</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
                 <path d="M19 9l-7 7-7-7" />
               </svg>
-            </a>
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold bg-white border border-[#D5CDC2] text-[#2C2725] hover:bg-[#F3ECE2] transition-colors"
-            >
-              Napsat na WhatsApp
-            </a>
+            </Button>
           </div>
         </div>
 
-        <!-- Pravý vizuál: připraveno na fotku krabičky cukroví (zatím zobrazuje reálný úvodní dort + štítek) -->
+        <!-- Pravý vizuál: decentní placeholder krabičky dle náčrtku (D3) -->
         <div class="lg:col-span-6">
-          <div class="relative rounded-3xl overflow-hidden shadow-xl border border-[#E8E2D8] bg-[#F3ECE2] aspect-[4/3]">
-            <img
-              src={withBase('/images/dorty/uvodni-dort.webp')}
-              alt="Ručně vyráběný raw dort Rawtík s čerstvým ovocem a ořechy"
-              fetchpriority="high"
-              width="1200"
-              height="900"
-              class="w-full h-full object-cover"
-            />
-            {
-              SITE.christmasSeason && (
-                <div class="absolute bottom-3 left-3 right-3 px-4 py-2.5 rounded-2xl bg-[#FAF7F2]/92 backdrop-blur-sm border border-[#E8E2D8] flex items-center justify-between gap-3">
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-[#8B2635]">Připravujeme vánoční foto</p>
-                    <p class="text-xs text-[#5A534E]">Po nafocení cukroví zde bude hlavní vánoční krabička.</p>
-                  </div>
-                  <a
-                    href={withBase('/vanocni-cukrovi')}
-                    class="shrink-0 text-xs font-bold px-3 py-1.5 rounded-lg bg-[#8B2635] text-white hover:bg-[#721E2B] transition-colors"
-                  >
-                    Cukroví →
-                  </a>
-                </div>
-              )
-            }
-          </div>
+          <PhotoPlaceholder
+            aspect="4/3"
+            class="rounded-[var(--radius-card)]"
+            viewTransitionName={SITE.christmasSeason ? 'cat-vanocni-cukrovi' : undefined}
+          />
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 2. NABÍDKA A CENÍK (Rozcestník se 3 výraznými klikacími kartami kategorií) -->
+  <!-- 2. NABÍDKA A CENÍK (Rozcestník se 3 kartami kategorií bez odznaků a zoomu) -->
   <section id="nabidka" class="scroll-mt-20 py-14 sm:py-16">
     <div class="max-w-5xl mx-auto px-4">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32] mb-2">Co pro vás vyrábíme</p>
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">
+      <div class="max-w-2xl mb-9">
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">
           Nabídka a ceník
         </h2>
-        <p class="mt-2.5 text-[#5A534E]">
+        <p class="mt-2 text-ink-soft">
           Vyberte si kategorii a prohlédněte si fotografie, složení i kompletní ceník.
         </p>
       </div>
@@ -125,9 +92,12 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
           OFFER_CATEGORIES.map((category) => (
             <a
               href={withBase(category.path)}
-              class="group rounded-2xl overflow-hidden bg-white border border-[#E8E2D8] shadow-xs hover:shadow-lg hover:border-[#C58B55] transition-all flex flex-col"
+              class="reveal group rounded-[var(--radius-card)] overflow-hidden bg-surface border border-line hover:border-ginger hover:shadow-md transition-all flex flex-col focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              <div class="relative aspect-[4/3] bg-[#F3ECE2] overflow-hidden">
+              <div
+                class="aspect-[4/3] bg-sand overflow-hidden"
+                style={`view-transition-name: cat-${category.id}`}
+              >
                 {category.image ? (
                   <img
                     src={withBase(category.image.src)}
@@ -135,38 +105,26 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
                     loading="lazy"
                     width="800"
                     height="600"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    class="w-full h-full object-cover"
                   />
                 ) : (
-                  <div class="w-full h-full bg-gradient-to-br from-[#6B202B] via-[#8B2635] to-[#9A5B32] p-6 flex flex-col items-center justify-center text-center text-white">
-                    <span class="text-xs uppercase tracking-widest text-white/80 font-semibold mb-1.5">
-                      5 letošních druhů
-                    </span>
-                    <p class="font-serif text-2xl font-bold leading-snug">Vánoční raw cukroví</p>
-                    <p class="text-xs text-white/80 mt-2 max-w-[20ch]">
-                      Fotografie krabiček doplníme ihned po focení
-                    </p>
-                  </div>
+                  <PhotoPlaceholder aspect="4/3" class="border-0 w-full h-full" />
                 )}
-
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-[#FAF7F2]/95 text-[#8B2635] shadow-xs">
-                  {category.badge}
-                </span>
               </div>
 
               <div class="p-5 flex-1 flex flex-col justify-between gap-4">
                 <div>
-                  <h3 class="font-serif text-2xl font-bold text-[#2C2725] group-hover:text-[#8B2635] transition-colors">
+                  <h3 class="font-display text-2xl font-bold text-ink group-hover:text-brand transition-colors">
                     {category.title}
                   </h3>
-                  <p class="mt-1.5 text-sm text-[#5A534E] leading-relaxed">
+                  <p class="mt-1.5 text-sm text-ink-soft leading-relaxed">
                     {category.subtitle}
                   </p>
                 </div>
 
-                <div class="flex items-center justify-between pt-3 border-t border-[#E8E2D8]">
-                  <span class="font-serif text-lg font-bold text-[#8B2635]">{category.priceFrom}</span>
-                  <span class="text-sm font-bold text-[#2C2725] group-hover:text-[#8B2635] inline-flex items-center gap-1">
+                <div class="flex items-center justify-between pt-3 border-t border-line">
+                  <span class="font-display text-lg font-bold text-brand">{category.priceFrom}</span>
+                  <span class="text-sm font-semibold text-ink group-hover:text-brand inline-flex items-center gap-1 transition-colors">
                     Zobrazit <span aria-hidden="true">→</span>
                   </span>
                 </div>
@@ -178,21 +136,20 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
     </div>
   </section>
 
-  <!-- 3. O NÁS -->
-  <section id="o-nas" class="scroll-mt-20 py-14 sm:py-16 bg-[#F3ECE2]/60 border-t border-[#E8E2D8]">
+  <!-- 3. O NÁS (perex + čisté odstavce + 1 velká fotka) -->
+  <section id="o-nas" class="scroll-mt-20 py-14 sm:py-16 bg-sand/55 border-t border-line">
     <div class="max-w-5xl mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <div class="lg:col-span-7 space-y-4">
-          <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Příběh &amp; suroviny</p>
-          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">O nás</h2>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">O nás</h2>
           {
             ABOUT_PARAGRAPHS.map((paragraph, idx) => (
               <p
                 class:list={[
                   'leading-relaxed',
                   idx === 0
-                    ? 'text-lg font-medium text-[#2C2725]'
-                    : 'text-base text-[#5A534E]',
+                    ? 'text-lg sm:text-xl font-display text-ink'
+                    : 'text-base text-ink-soft',
                 ]}
               >
                 {paragraph}
@@ -201,24 +158,14 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
           }
         </div>
 
-        <div class="lg:col-span-5 grid grid-cols-2 gap-3">
-          <div class="rounded-2xl overflow-hidden border border-[#E8E2D8] shadow-sm aspect-[3/4]">
+        <div class="lg:col-span-5 reveal">
+          <div class="rounded-[var(--radius-card)] overflow-hidden border border-line aspect-[4/5] bg-sand">
             <img
               src={withBase('/images/dorty/malinovy-24cm.webp')}
               alt="Malinový raw dort zdobený ovocem a pistáciemi"
               loading="lazy"
-              width="600"
-              height="800"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="rounded-2xl overflow-hidden border border-[#E8E2D8] shadow-sm aspect-[3/4] mt-6">
-            <img
-              src={withBase('/images/dorty/slany-arasid-zdobeny.webp')}
-              alt="Raw dort Slaný arašíd se zdobením"
-              loading="lazy"
-              width="600"
-              height="800"
+              width="800"
+              height="1000"
               class="w-full h-full object-cover"
             />
           </div>
@@ -233,54 +180,48 @@ const whatsappLink = getWhatsAppUrl('Dobrý den, mám zájem o objednávku u Raw
   <!-- 5. KONTAKT -->
   <section id="kontakt" class="scroll-mt-20 py-14 sm:py-16">
     <div class="max-w-5xl mx-auto px-4">
-      <div class="rounded-3xl bg-white border border-[#E8E2D8] p-6 sm:p-10 shadow-xs">
+      <div class="reveal rounded-[var(--radius-card)] bg-surface border border-line p-6 sm:p-10">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div class="md:col-span-7 space-y-3">
-            <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Kde mě najdete</p>
-            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#2C2725]">Kontakt</h2>
-            <p class="text-lg font-semibold text-[#2C2725] pt-1">{SITE.owner}</p>
-            <p class="text-[#5A534E]">{SITE.location}</p>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-ink">Kontakt</h2>
+            <p class="text-lg font-semibold text-ink pt-1">{SITE.owner}</p>
+            <p class="text-ink-soft">{SITE.location}</p>
 
             <dl class="pt-2 space-y-2 text-sm sm:text-base">
               <div class="flex flex-wrap gap-x-2">
-                <dt class="text-[#7A726C]">Telefon / WhatsApp:</dt>
-                <dd class="font-semibold text-[#2C2725]">
-                  <a href={SITE.phoneHref} class="hover:text-[#8B2635] transition-colors">
+                <dt class="text-ink-muted">Telefon / WhatsApp:</dt>
+                <dd class="font-semibold text-ink">
+                  <a href={SITE.phoneHref} class="hover:text-brand transition-colors">
                     {SITE.phoneDisplay}
                   </a>
                 </dd>
               </div>
               <div class="flex flex-wrap gap-x-2">
-                <dt class="text-[#7A726C]">E-mail:</dt>
-                <dd class="font-semibold text-[#2C2725]">
-                  <a href={`mailto:${SITE.email}`} class="hover:text-[#8B2635] transition-colors">
+                <dt class="text-ink-muted">E-mail:</dt>
+                <dd class="font-semibold text-ink">
+                  <a href={`mailto:${SITE.email}`} class="hover:text-brand transition-colors">
                     {SITE.email}
                   </a>
                 </dd>
               </div>
               <div class="flex flex-wrap gap-x-2">
-                <dt class="text-[#7A726C]">IČO:</dt>
-                <dd class="font-medium text-[#2C2725]">{SITE.ico}</dd>
+                <dt class="text-ink-muted">IČO:</dt>
+                <dd class="font-medium text-ink">{SITE.ico}</dd>
               </div>
             </dl>
           </div>
 
-          <div class="md:col-span-5 rounded-2xl bg-[#FAF7F2] border border-[#E8E2D8] p-6 text-center space-y-3">
-            <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32]">Sledujte nás na</p>
-            <a
-              href={SITE.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2.5 w-full py-3.5 px-5 rounded-xl font-bold text-white bg-gradient-to-r from-[#8B2635] via-[#B43E4F] to-[#C58B55] hover:opacity-95 transition-opacity shadow-sm"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <div class="md:col-span-5 rounded-[var(--radius-card)] bg-cream border border-line p-6 text-center space-y-3">
+            <p class="text-xs font-semibold uppercase tracking-wider text-cinnamon">Sledujte nás</p>
+            <Button href={SITE.instagramUrl} external variant="secondary" size="lg" class="w-full">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
               <span>Instagram {SITE.instagramHandle}</span>
-            </a>
-            <p class="text-xs text-[#7A726C]">
+            </Button>
+            <p class="text-xs text-ink-muted">
               Aktuální fotky dortů, sezónní novinky a zákulisí výroby.
             </p>
           </div>

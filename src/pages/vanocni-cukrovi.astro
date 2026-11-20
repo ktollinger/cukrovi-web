@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
+import OrderCta from '../components/OrderCta.astro';
+import PhotoPlaceholder from '../components/ui/PhotoPlaceholder.astro';
 import { CHRISTMAS_BOX_PRICES, CHRISTMAS_COOKIES } from '../data/products';
-import { getWhatsAppUrl, withBase } from '../data/site';
-
-const whatsappLink = getWhatsAppUrl(
-  'Dobrý den, ráda bych si objednala vánoční raw cukroví (300 g / 500 g / 1 000 g): '
-);
+import { withBase } from '../data/site';
 ---
 
 <Layout
@@ -15,122 +15,75 @@ const whatsappLink = getWhatsAppUrl(
 >
   <section class="pt-6 pb-12 sm:pt-10 sm:pb-16">
     <div class="max-w-5xl mx-auto px-4">
-      <!-- Drobečková navigace -->
-      <nav aria-label="Drobečková navigace" class="text-xs sm:text-sm text-[#7A726C] mb-5">
-        <a href={withBase('/')} class="hover:text-[#8B2635]">Domů</a>
-        <span class="mx-1.5">/</span>
-        <a href={withBase('/#nabidka')} class="hover:text-[#8B2635]">Nabídka a ceník</a>
-        <span class="mx-1.5">/</span>
-        <span class="text-[#2C2725] font-medium">Vánoční cukroví</span>
-      </nav>
+      <Breadcrumbs
+        items={[
+          { label: 'Domů', href: '/' },
+          { label: 'Nabídka a ceník', href: '/#nabidka' },
+          { label: 'Vánoční cukroví' },
+        ]}
+      />
 
-      <!-- 1. Úvodní foto + 2. Úvodní text -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div class="lg:col-span-6 space-y-4">
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B2635]/10 text-[#8B2635] text-xs font-bold uppercase tracking-wider">
-            Vánoční edice 2026
-          </span>
-          <h1 class="font-serif text-3xl sm:text-5xl font-bold text-[#2C2725] leading-tight">
-            Vánoční cukroví
-          </h1>
-          <p class="text-base sm:text-lg text-[#5A534E] leading-relaxed">
-            Vánoční cukroví z kvalitních surovin, slazené <strong>datlemi a medem od včelaře</strong>.
-            Přirozeně <strong>bez lepku a laktózy</strong>.
-          </p>
-          <div class="inline-flex items-start gap-2.5 p-3.5 rounded-xl bg-white border border-[#E8E2D8] text-sm text-[#2C2725]">
-            <span class="text-[#9A5B32] font-bold shrink-0">Trvanlivost:</span>
-            <span>7 dní v lednici, případně možné zamrazit.</span>
-          </div>
-        </div>
+      <PageHero
+        title="Vánoční cukroví"
+        lead="Vánoční cukroví z kvalitních surovin, slazené datlemi a medem od včelaře. Přirozeně bez lepku a laktózy."
+        viewTransitionName="cat-vanocni-cukrovi"
+      >
+        <p class="inline-flex items-baseline gap-2 px-3.5 py-2 rounded-xl bg-surface border border-line text-sm text-ink">
+          <span class="font-semibold text-cinnamon">Trvanlivost:</span>
+          <span>7 dní v lednici, případně možné zamrazit.</span>
+        </p>
+      </PageHero>
 
-        <div class="lg:col-span-6">
-          <div class="rounded-3xl overflow-hidden border border-[#E8E2D8] shadow-md aspect-[4/3] bg-gradient-to-br from-[#6B202B] via-[#8B2635] to-[#9A5B32] p-8 flex flex-col items-center justify-center text-center text-white">
-            <span class="text-xs uppercase tracking-widest text-white/80 font-semibold mb-2">
-              Hlavní fotografie vánočního cukroví
-            </span>
-            <p class="font-serif text-2xl sm:text-3xl font-bold">Místo pro úvodní fotku krabičky</p>
-            <p class="text-xs sm:text-sm text-white/80 mt-2 max-w-sm">
-              Sem vložíme vyfocenou vánoční krabičku se svícny, jedlovými větvemi a kořením.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Ceník -->
-      <div class="mt-12 rounded-3xl bg-white border border-[#E8E2D8] p-6 sm:p-8 shadow-xs">
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725] mb-6 text-center">
-          Ceník krabiček
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <!-- Kompaktní řádek ceníku krabiček -->
+      <div class="reveal mt-10 rounded-[var(--radius-card)] bg-surface border border-line p-4 sm:p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-line text-center">
           {
             CHRISTMAS_BOX_PRICES.map((box) => (
-              <div
-                class:list={[
-                  'rounded-2xl p-6 text-center border transition-all',
-                  box.highlight
-                    ? 'bg-[#8B2635] text-white border-[#8B2635] shadow-md'
-                    : 'bg-[#FAF7F2] text-[#2C2725] border-[#E8E2D8]',
-                ]}
-              >
-                <p
-                  class:list={[
-                    'text-xs font-bold uppercase tracking-widest',
-                    box.highlight ? 'text-white/80' : 'text-[#9A5B32]',
-                  ]}
-                >
-                  Mix 5 druhů
-                </p>
-                <p class="font-serif text-3xl font-bold mt-2">{box.weight}</p>
-                <p
-                  class:list={[
-                    'font-serif text-2xl font-bold mt-2',
-                    box.highlight ? 'text-[#F5D6B4]' : 'text-[#8B2635]',
-                  ]}
-                >
-                  {box.price}
-                </p>
+              <div class="py-3 sm:py-1 sm:px-4 flex sm:flex-col items-center justify-between sm:justify-center gap-2">
+                <div class="text-left sm:text-center">
+                  <p class="font-display text-lg font-bold text-ink">{box.weight}</p>
+                  <p class="text-xs text-ink-muted">Mix 5 druhů</p>
+                </div>
+                <p class="font-display text-xl sm:text-2xl font-bold text-brand">{box.price}</p>
               </div>
             ))
           }
         </div>
       </div>
 
-      <!-- 4. Letošní druhy (5 druhů + složení + místo na foto) -->
-      <div class="mt-14">
+      <!-- 5 letošních druhů -->
+      <div class="mt-12">
         <div class="mb-6">
-          <p class="text-xs font-bold uppercase tracking-widest text-[#9A5B32] mb-1">5 druhů v každé krabičce</p>
-          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725]">Letošní druhy</h2>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink">Letošní druhy</h2>
+          <p class="text-sm text-ink-muted mt-1">Všech 5 druhů je součástí každé vánoční krabičky</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           {
-            CHRISTMAS_COOKIES.map((cookie, idx) => (
-              <article class="rounded-2xl bg-white border border-[#E8E2D8] p-4 sm:p-5 flex gap-4 items-start shadow-xs">
-                <div class="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-[#F3ECE2] border border-[#E8E2D8] flex flex-col items-center justify-center text-center p-2 text-[#9A5B32]">
-                  {cookie.photo ? (
+            CHRISTMAS_COOKIES.map((cookie) => (
+              <article class="reveal rounded-[var(--radius-card)] bg-surface border border-line p-4 sm:p-5 flex gap-4 items-start">
+                {cookie.photo ? (
+                  <div class="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden border border-line bg-sand">
                     <img
                       src={withBase(cookie.photo.src)}
                       alt={cookie.photo.alt}
                       loading="lazy"
                       width="240"
                       height="240"
-                      class="w-full h-full object-cover rounded-lg"
+                      class="w-full h-full object-cover"
                     />
-                  ) : (
-                    <>
-                      <span class="font-serif text-xl font-bold">0{idx + 1}</span>
-                      <span class="text-[10px] uppercase tracking-wider mt-0.5 text-[#7A726C]">Foto doplníme</span>
-                    </>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <PhotoPlaceholder aspect="1/1" class="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl" />
+                )}
 
                 <div class="min-w-0">
-                  <h3 class="font-serif text-xl font-bold text-[#2C2725]">{cookie.name}</h3>
-                  <p class="mt-1.5 text-sm text-[#5A534E] leading-relaxed">
-                    <span class="font-semibold text-[#2C2725]">Složení:</span> {cookie.ingredients}
+                  <h3 class="font-display text-xl font-bold text-ink">{cookie.name}</h3>
+                  <p class="mt-1.5 text-sm text-ink-soft leading-relaxed">
+                    <span class="font-semibold text-ink">Složení:</span> {cookie.ingredients}
                   </p>
                   {cookie.note && (
-                    <p class="mt-1 text-xs italic text-[#7A726C]">{cookie.note}</p>
+                    <p class="mt-1 text-xs italic text-ink-muted">{cookie.note}</p>
                   )}
                 </div>
               </article>
@@ -139,48 +92,23 @@ const whatsappLink = getWhatsAppUrl(
         </div>
       </div>
 
-      <!-- 5. Galerie hotových krabiček (placeholder) -->
-      <div class="mt-14">
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#2C2725] mb-4">
-          Hotové krabičky
-        </h2>
+      <!-- Hotové krabičky (decentní placeholdery dle D2) -->
+      <div class="mt-12">
+        <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink mb-4">Hotové krabičky</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {
-            ['Krabička 300 g', 'Krabička 500 g', 'Krabička 1 000 g'].map((label) => (
-              <div class="aspect-[4/3] rounded-2xl bg-[#F3ECE2] border border-dashed border-[#C58B55] flex flex-col items-center justify-center p-4 text-center">
-                <p class="font-serif font-bold text-[#8B2635]">{label}</p>
-                <p class="text-xs text-[#7A726C] mt-1">Foto hotové krabičky po focení</p>
-              </div>
+            [0, 1, 2].map(() => (
+              <PhotoPlaceholder aspect="4/3" class="reveal rounded-[var(--radius-card)]" />
             ))
           }
         </div>
       </div>
 
-      <!-- 6. Objednávka CTA -->
-      <div class="mt-14 rounded-3xl bg-[#8B2635] text-white p-7 sm:p-10 text-center space-y-4 shadow-md">
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold">
-          Chcete si rezervovat vánoční cukroví?
-        </h2>
-        <p class="text-sm sm:text-base text-white/85 max-w-xl mx-auto">
-          Objednávky přijímám telefonicky, přes WhatsApp nebo e-mailem. Společně domluvíme gramáž a termín převzetí na Praze 7.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-3 pt-2">
-          <a
-            href={withBase('/#jak-objednat')}
-            class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-base font-bold bg-white text-[#8B2635] hover:bg-[#FAF7F2] transition-colors"
-          >
-            Objednat vánoční cukroví
-          </a>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center px-7 py-3.5 rounded-xl text-base font-bold bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors"
-          >
-            Napsat na WhatsApp
-          </a>
-        </div>
-      </div>
+      <OrderCta
+        title="Chcete si rezervovat vánoční cukroví?"
+        description="Objednávky přijímám telefonicky, přes WhatsApp nebo e-mailem. Společně domluvíme gramáž a termín převzetí na Praze 7."
+        buttonLabel="Objednat vánoční cukroví"
+      />
     </div>
   </section>
 </Layout>

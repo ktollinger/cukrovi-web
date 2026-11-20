@@ -1,0 +1,31 @@
+---
+import { withBase } from '../data/site';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Drobečková navigace" class="text-xs sm:text-sm text-ink-muted mb-5">
+  {
+    items.map((item, idx) => (
+      <>
+        {idx > 0 && <span class="mx-1.5 text-line" aria-hidden="true">/</span>}
+        {item.href ? (
+          <a href={withBase(item.href)} class="hover:text-brand transition-colors">
+            {item.label}
+          </a>
+        ) : (
+          <span class="text-ink font-medium">{item.label}</span>
+        )}
+      </>
+    ))
+  }
+</nav>
