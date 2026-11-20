@@ -25,17 +25,17 @@ Pokud sedíte s kamarádkou u stolu a chcete jí web ukázat na jejím vlastním
 
 V repozitáři je připraven nativní workflow `.github/workflows/deploy.yml` (`actions/deploy-pages@v4`).
 
-1. Vytvořte na svém GitHubu nový repozitář (např. `cukrovi-web`).
+1. Vytvořte na svém GitHubu nový repozitář (např. `rawtik`).
 2. Přidejte remote a pushněte:
    ```bash
-   git remote add origin git@github.com:ktollinger/cukrovi-web.git
+   git remote add origin git@github.com:ktollinger/rawtik.git
    git branch -M main
    git push -u origin main
    ```
 3. V nastavení GitHub repozitáře (**Settings $\rightarrow$ Pages $\rightarrow$ Build and deployment**):
    - Vyberte jako Source: **GitHub Actions**.
 4. Během 30–45 sekund bude web dostupný na adrese:  
-   `https://ktollinger.github.io/cukrovi-web/`
+   `https://ktollinger.github.io/rawtik/`
 
 ---
 
@@ -47,7 +47,7 @@ V repozitáři je připraven nativní workflow `.github/workflows/deploy.yml` (`
    - **Jednotlivé druhy cukroví**: čtverec (1:1), cca 800–1000 px.
    - **Fotka cukrářky / ruce při zdobení**: na výšku (4:5), cca 1200 px.
 2. Uložte je do složky `public/images/`.
-3. V souboru `src/pages/index.astro` nahraďte placeholdery cestami k fotkám (např. `/cukrovi-web/images/hero.webp`).
+3. V souboru `src/pages/index.astro` nahraďte placeholdery cestami k fotkám (např. `/rawtik/images/hero.webp`).
 
 ---
 
