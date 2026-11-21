@@ -52,6 +52,7 @@ const ogImageUrl = Astro.site
     </script>
   </head>
   <body class="bg-cream text-ink antialiased selection:bg-brand selection:text-white min-h-svh flex flex-col">
+    <FontSwitcher />
     <HeaderDrawer currentPath={currentPath} />
 
     <main class="flex-1">
@@ -82,7 +83,5 @@ const ogImageUrl = Astro.site
         </div>
       </div>
     </footer>
-
-    <FontSwitcher />
   </body>
 </html>

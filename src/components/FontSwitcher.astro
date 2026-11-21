@@ -1,26 +1,30 @@
 <!-- Dočasný přepínač písma nadpisů (Fraunces / Playfair) pro výběr Andreou -->
-<div
-  class="fixed bottom-4 left-4 z-30 inline-flex items-center gap-1 p-1 rounded-full bg-surface/95 backdrop-blur-md border border-line shadow-md text-xs"
-  role="group"
-  aria-label="Náhled písma nadpisů"
->
-  <span class="pl-2.5 pr-1 text-ink-muted font-medium hidden sm:inline">Písmo:</span>
-  <button
-    type="button"
-    data-set-font="fraunces"
-    aria-pressed="true"
-    class="px-2.5 py-1 rounded-full font-semibold transition-colors cursor-pointer"
-  >
-    Fraunces
-  </button>
-  <button
-    type="button"
-    data-set-font="playfair"
-    aria-pressed="false"
-    class="px-2.5 py-1 rounded-full font-semibold transition-colors cursor-pointer"
-  >
-    Playfair
-  </button>
+<div class="bg-sand/70 border-b border-line py-1.5 px-4">
+  <div class="max-w-5xl mx-auto flex items-center justify-center sm:justify-end gap-2 text-xs">
+    <span class="text-ink-muted font-medium">Náhled písma nadpisů:</span>
+    <div
+      class="inline-flex items-center gap-1 p-0.5 rounded-full bg-surface border border-line"
+      role="group"
+      aria-label="Náhled písma nadpisů"
+    >
+      <button
+        type="button"
+        data-set-font="fraunces"
+        aria-pressed="true"
+        class="px-2.5 py-0.5 rounded-full font-semibold transition-colors cursor-pointer"
+      >
+        Fraunces
+      </button>
+      <button
+        type="button"
+        data-set-font="playfair"
+        aria-pressed="false"
+        class="px-2.5 py-0.5 rounded-full font-semibold transition-colors cursor-pointer"
+      >
+        Playfair
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>

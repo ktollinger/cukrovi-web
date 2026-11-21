@@ -159,13 +159,13 @@ import { SITE, withBase } from '../data/site';
         </div>
 
         <div class="lg:col-span-5 reveal">
-          <div class="rounded-[var(--radius-card)] overflow-hidden border border-line aspect-[4/5] bg-sand">
+          <div class="rounded-[var(--radius-card)] overflow-hidden border border-line aspect-square bg-sand">
             <img
               src={withBase('/images/dorty/malinovy-24cm.webp')}
               alt="Malinový raw dort zdobený ovocem a pistáciemi"
               loading="lazy"
               width="800"
-              height="1000"
+              height="800"
               class="w-full h-full object-cover"
             />
           </div>
@@ -213,7 +213,7 @@ import { SITE, withBase } from '../data/site';
 
           <div class="md:col-span-5 rounded-[var(--radius-card)] bg-cream border border-line p-6 text-center space-y-3">
             <p class="text-xs font-semibold uppercase tracking-wider text-cinnamon">Sledujte nás</p>
-            <Button href={SITE.instagramUrl} external variant="secondary" size="lg" class="w-full">
+            <Button href={SITE.instagramUrl} external variant="secondary" size="md" class="w-full whitespace-nowrap">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
