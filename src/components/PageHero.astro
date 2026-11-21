@@ -7,10 +7,11 @@ interface Props {
   lead: string;
   imageSrc?: string;
   imageAlt?: string;
+  placeholderLabel?: string;
   viewTransitionName?: string;
 }
 
-const { title, lead, imageSrc, imageAlt = '', viewTransitionName } = Astro.props;
+const { title, lead, imageSrc, imageAlt = '', placeholderLabel, viewTransitionName } = Astro.props;
 ---
 
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center">
@@ -43,6 +44,7 @@ const { title, lead, imageSrc, imageAlt = '', viewTransitionName } = Astro.props
       ) : (
         <PhotoPlaceholder
           aspect="4/3"
+          label={placeholderLabel}
           class="rounded-[var(--radius-card)]"
           viewTransitionName={viewTransitionName}
         />

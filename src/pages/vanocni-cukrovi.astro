@@ -26,6 +26,7 @@ import { withBase } from '../data/site';
       <PageHero
         title="Vánoční cukroví"
         lead="Vánoční cukroví z kvalitních surovin, slazené datlemi a medem od včelaře. Přirozeně bez lepku a laktózy."
+        placeholderLabel="Úvodní foto: vánoční krabička s cukrovím"
         viewTransitionName="cat-vanocni-cukrovi"
       >
         <p class="inline-flex items-baseline gap-2 px-3.5 py-2 rounded-xl bg-surface border border-line text-sm text-ink">
@@ -74,7 +75,12 @@ import { withBase } from '../data/site';
                     />
                   </div>
                 ) : (
-                  <PhotoPlaceholder aspect="1/1" class="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl" />
+                  <PhotoPlaceholder
+                    aspect="1/1"
+                    label="Foto druhu"
+                    compact
+                    class="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl"
+                  />
                 )}
 
                 <div class="min-w-0">
@@ -97,8 +103,12 @@ import { withBase } from '../data/site';
         <h2 class="font-display text-2xl sm:text-3xl font-bold text-ink mb-4">Hotové krabičky</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {
-            [0, 1, 2].map(() => (
-              <PhotoPlaceholder aspect="4/3" class="reveal rounded-[var(--radius-card)]" />
+            ['Krabička 300 g', 'Krabička 500 g', 'Krabička 1 000 g'].map((boxLabel) => (
+              <PhotoPlaceholder
+                aspect="4/3"
+                label={`Foto: ${boxLabel}`}
+                class="reveal rounded-[var(--radius-card)]"
+              />
             ))
           }
         </div>

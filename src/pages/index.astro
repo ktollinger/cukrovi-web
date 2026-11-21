@@ -28,11 +28,13 @@ import { SITE, withBase } from '../data/site';
             {
               SITE.christmasSeason ? (
                 <>
-                  Vánoční cukroví <span class="text-brand italic font-normal">bez výčitek</span>
+                  Vánoční cukroví{' '}
+                  <span class="text-brand italic font-normal whitespace-nowrap">bez výčitek</span>
                 </>
               ) : (
                 <>
-                  Raw dorty <span class="text-brand italic font-normal">bez výčitek</span>
+                  Raw dorty{' '}
+                  <span class="text-brand italic font-normal whitespace-nowrap">bez výčitek</span>
                 </>
               )
             }
@@ -67,6 +69,7 @@ import { SITE, withBase } from '../data/site';
         <div class="lg:col-span-6">
           <PhotoPlaceholder
             aspect="4/3"
+            label="Úvodní foto: vánoční krabička s cukrovím"
             class="rounded-[var(--radius-card)]"
             viewTransitionName={SITE.christmasSeason ? 'cat-vanocni-cukrovi' : undefined}
           />
@@ -108,7 +111,11 @@ import { SITE, withBase } from '../data/site';
                     class="w-full h-full object-cover"
                   />
                 ) : (
-                  <PhotoPlaceholder aspect="4/3" class="border-0 w-full h-full" />
+                  <PhotoPlaceholder
+                    aspect="4/3"
+                    label="Foto: vánoční raw cukroví"
+                    class="border-0 w-full h-full"
+                  />
                 )}
               </div>
 
